@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* === Cartographer-Alchemist Design System === */
+
+:root {
+  /* Primary - The Scholar's Desk */
+  --midnight: #0F1729;
+  --parchment: #F5E6C8;
+  --leather: #2C1810;
+  --ink-dark: #3D2B1F;
+  --ivory: #EDE0CC;
+
+  /* Accents - The Alchemist's Glow */
+  --gold: #D4A843;
+  --amber: #C17817;
+  --amethyst: #6B3FA0;
+  --verdigris: #4A8B7F;
+  --glow: #E8C547;
+
+  /* Atmosphere */
+  --fog: #8B9DAF;
+  --candlelight: rgba(212, 168, 67, 0.15);
+  --sepia: #704214;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--midnight);
+  color: var(--ivory);
+  font-family: 'Lora', Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Parchment texture overlay */
+.parchment-bg {
+  position: relative;
+  background: var(--parchment);
+  color: var(--ink-dark);
+}
+.parchment-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(112, 66, 20, 0.03) 28px,
+      rgba(112, 66, 20, 0.03) 29px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Leather texture */
+.leather-bg {
+  background: var(--leather);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(68, 38, 22, 0.4) 0%, transparent 70%),
+    radial-gradient(ellipse at 80% 50%, rgba(68, 38, 22, 0.3) 0%, transparent 70%);
+}
+
+/* Gold ink stroke underline */
+.ink-stroke {
+  position: relative;
+  display: inline-block;
+}
+.ink-stroke::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: -4px;
+  right: -4px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 40% 60% 50% 50%;
+  opacity: 0.8;
+}
+
+/* Breathing glow animation */
+@keyframes breathe {
+  0%, 100% { opacity: 0.6; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.15); }
+}
+.breathing-glow {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+/* Golden motes */
+@keyframes float-mote {
+  0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.4; }
+  100% { transform: translateY(-120px) translateX(30px) scale(0.3); opacity: 0; }
+}
+
+/* Compass rotation */
+@keyframes compass-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Ink bleed reveal */
+@keyframes ink-reveal {
+  0% { clip-path: inset(0 100% 0 0); opacity: 0.3; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+.ink-reveal {
+  animation: ink-reveal 0.8s ease-out forwards;
+}
+
+/* Fog clearing */
+@keyframes fog-clear {
+  0% { filter: blur(8px); opacity: 0.3; }
+  100% { filter: blur(0); opacity: 1; }
+}
+.fog-clear {
+  animation: fog-clear 0.6s ease-out forwards;
+}
+
+/* Card hover - candlelight approach */
+.card-alchemist {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(112, 66, 20, 0.2);
+}
+.card-alchemist:hover {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 20px rgba(212, 168, 67, 0.08),
+    inset 0 0 30px rgba(212, 168, 67, 0.03);
+}
+
+/* Wax seal button */
+.wax-seal {
+  position: relative;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  color: var(--leather);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.wax-seal:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 20px rgba(212, 168, 67, 0.3);
+}
+.wax-seal:active {
+  transform: scale(0.97);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--midnight);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(112, 66, 20, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sepia);
+}
+
+/* Section divider - ornamental */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--sepia);
+  opacity: 0.5;
+  margin: 2rem 0;
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--sepia), transparent);
+}
