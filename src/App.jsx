@@ -84,7 +84,7 @@ function GoldenMotes() {
 
 function HeroSlide({ next }) {
   return (
-    <div className="relative flex flex-col items-center justify-center h-full text-center px-8 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center min-h-full text-center px-8 overflow-hidden">
       {/* Background topographic lines */}
       <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: `repeating-radial-gradient(circle at 50% 50%, transparent, transparent 40px, #D4A843 40px, #D4A843 41px)`,
@@ -140,7 +140,7 @@ function HeroSlide({ next }) {
 
 function VenturesSlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
       <CartoucheLabel>Current Ventures</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>What I'm Building</h2>
@@ -198,7 +198,7 @@ function VenturesSlide() {
 
 function ProjectsSlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
       <CartoucheLabel>Research & Craft</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Side Projects</h2>
@@ -265,7 +265,7 @@ function ProjectsSlide() {
 
 function AthleticsSlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
       <CartoucheLabel>Physical Terrain</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Physical Pursuits</h2>
@@ -318,7 +318,7 @@ function AthleticsSlide() {
 
 function PhilosophySlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
       <CartoucheLabel>The Legend</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Mental Models</h2>
@@ -495,7 +495,7 @@ function RecommendationsSlide() {
 
 function VisionSlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
       <div className="relative mb-8">
         <CompassRose size={80} className="opacity-60" />
         <div className="absolute inset-0 rounded-full breathing-glow"
@@ -537,7 +537,7 @@ function VisionSlide() {
 
 function ConnectSlide() {
   return (
-    <div className="px-8 py-8 h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-8 min-h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
@@ -620,7 +620,7 @@ export default function App() {
   const { Component } = slides[active];
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#0F1729" }}>
+    <div className="h-screen flex flex-col" style={{ background: "#0F1729" }}>
 
       {/* Navigation — leather codex header */}
       <nav className="leather-bg flex items-center justify-between px-6 py-4 border-b border-[#704214]/40 flex-shrink-0">
