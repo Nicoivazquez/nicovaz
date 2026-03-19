@@ -116,8 +116,8 @@ function HeroSlide({ next }) {
 
       <p className="text-[#8B9DAF] max-w-xl text-base leading-relaxed mb-8"
         style={{ fontFamily: "Lora, serif" }}>
-        Ex-Asana SWE turned multi-venture founder. I build at the intersection of technology,
-        psychology, and human performance — and spend the rest of my time at altitude.
+        Ex-FAANG SWE turned multi-venture founder. I build at the intersection of technology,
+        consciousness, and human performance — and spend the rest of my time at altitude.
       </p>
 
       <div className="flex gap-2 flex-wrap justify-center mb-10">
@@ -145,31 +145,31 @@ function VenturesSlide() {
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>What I'm Building</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Three bets at the intersection of health, technology, and consciousness.
+        Building at the intersection of consciousness tech, developer tools, and physical wellness.
       </p>
       <AlchemicalDivider />
       <div className="grid gap-4">
         {[
           {
-            glyph: "⚕",
-            name: "Harm Reduction Concierge Medicine",
-            desc: "High-touch medical service for people who engage with psychedelics and other substances intentionally. Concierge doctor meets harm reduction philosophy.",
-            tags: ["Health", "Psychedelics", "Concierge"],
+            glyph: "◎",
+            name: "Attune",
+            desc: "Virtual coworking meets emotional development — Focusmate for EQ. 7 practice modalities, facilitator marketplace, Wayfinder assessment (Cook-Greuter), and a trophy system that rewards inner work.",
+            tags: ["Next.js", "LiveKit", "PostgreSQL", "Consciousness Tech"],
+            accent: "#6B3FA0",
+          },
+          {
+            glyph: "✧",
+            name: "Quill",
+            desc: "Open-source, local-first audio transcription. 8 adapters (WhisperX, Parakeet, Canary), speaker diarization, AI chat with your transcripts, and native Obsidian integration. Privacy by default.",
+            tags: ["Go", "React", "Electron", "Open Source"],
             accent: "#4A8B7F",
           },
           {
-            glyph: "⚘",
-            name: "High-Quality Food Grocery",
-            desc: "A grocery concept built around sourcing integrity — whole foods, transparent supply chains, and an experience that makes eating well effortless.",
-            tags: ["Food", "Retail", "Wellness"],
+            glyph: "☀",
+            name: "Red Light Throne",
+            desc: "Red light therapy where the sun don't shine. A wellness hardware product disguised as a pre-launch landing page — currently building waitlist and validating demand.",
+            tags: ["Hardware", "Wellness", "Pre-Launch"],
             accent: "#D4A843",
-          },
-          {
-            glyph: "◎",
-            name: "Life Logging App",
-            desc: "Goal achievement through emotional alignment. Track not just what you do, but how you feel doing it — surfacing the patterns that drive or block growth.",
-            tags: ["Mobile", "Psychology", "Productivity"],
-            accent: "#6B3FA0",
           },
         ].map(v => (
           <div key={v.name} className="card-alchemist flex gap-4 p-5 rounded-sm"
@@ -199,27 +199,27 @@ function VenturesSlide() {
 function ProjectsSlide() {
   return (
     <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
-      <CartoucheLabel>Research & Craft</CartoucheLabel>
+      <CartoucheLabel>Infrastructure & Research</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
-        style={{ fontFamily: "Playfair Display, serif" }}>Side Projects</h2>
+        style={{ fontFamily: "Playfair Display, serif" }}>Systems & Research</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Where engineering instincts meet psychological curiosity.
+        Multi-agent systems, content intelligence, and the tools behind the ventures.
       </p>
       <AlchemicalDivider />
       <div className="grid gap-4">
         {[
           {
             symbol: "⬡",
-            name: "The Cartographer's Gate",
-            desc: "A psychological assessment system that rapidly evaluates ego development stage (Cook-Greuter EDT), attachment patterns, and IFS profile — then routes people to targeted modalities and practitioners. Built on sentence-completion stems + LLM scoring.",
-            tags: ["React", "Claude API", "Cook-Greuter", "IFS", "Polyvagal"],
+            name: "OpenClaw",
+            desc: "A multi-agent operating system built on the Working Geniuses framework. Six specialized agents — Atlas, Orchestrator, Venture, Invention, Gal, Build — each with persistent memory, coordinating through a shared workspace to run my entire venture portfolio.",
+            tags: ["Multi-Agent", "Working Geniuses", "Claude"],
             status: "Active",
           },
           {
             symbol: "✧",
-            name: "The Sextant",
-            desc: "Two-layer measurement system for personal development: micro Territory Pulse assessments (nervous system, relationships, body, agency) after each session, plus deep ego-stage reassessments every 3–6 months.",
-            tags: ["Psychology", "UX", "Assessment"],
+            name: "ContentOS",
+            desc: "Three-agent content intelligence pipeline: strategy bible generation from a 15-question psychological profile, automated market research, and content brief creation. Feeds into an AI video pipeline using Kling 2.x and Seedance 2.0.",
+            tags: ["Content", "AI Pipeline", "Strategy"],
             status: "Active",
           },
           {
