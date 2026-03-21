@@ -312,10 +312,11 @@ function ProjectsSlide() {
         {[
           {
             glyph: "◎",
-            name: "Attune",
+            name: "The Clearing",
             desc: "Virtual coworking meets emotional development — Focusmate for EQ. Practice modalities, facilitator marketplace, and a trophy system that rewards inner work.",
             tags: ["Consciousness Tech", "Next.js", "LiveKit"],
             accent: "#6B3FA0",
+            url: "https://theclearing.app",
           },
           {
             glyph: "✧",
@@ -323,6 +324,7 @@ function ProjectsSlide() {
             desc: "Open-source, local-first audio transcription. 8 adapters, speaker diarization, AI chat with your transcripts, and native Obsidian integration.",
             tags: ["Go", "React", "Open Source"],
             accent: "#4A8B7F",
+            url: "https://github.com/Nicoivazquez/quill",
           },
           {
             glyph: "☀",
@@ -358,7 +360,13 @@ function ProjectsSlide() {
             <span className="text-xl flex-shrink-0 w-7 text-center mt-0.5" style={{ color: v.accent }}>{v.glyph}</span>
             <div>
               <h3 className="text-[#EDE0CC] font-semibold text-sm mb-1"
-                style={{ fontFamily: "Playfair Display, serif" }}>{v.name}</h3>
+                style={{ fontFamily: "Playfair Display, serif" }}>
+                {v.url ? (
+                  <a href={v.url} target="_blank" rel="noopener noreferrer"
+                    className="hover:text-[#D4A843] transition-colors"
+                    style={{ textDecoration: "none", color: "inherit" }}>{v.name} <span className="text-[10px] opacity-50">↗</span></a>
+                ) : v.name}
+              </h3>
               <p className="text-[#8B9DAF] text-xs mb-2 leading-relaxed"
                 style={{ fontFamily: "Lora, serif" }}>{v.desc}</p>
               <div className="flex gap-1.5 flex-wrap">
