@@ -116,12 +116,13 @@ function HeroSlide({ next }) {
 
       <p className="text-[#8B9DAF] max-w-xl text-base leading-relaxed mb-8"
         style={{ fontFamily: "Lora, serif" }}>
-        Ex-FAANG SWE turned multi-venture founder. I build at the intersection of technology,
-        consciousness, and human performance — and spend the rest of my time at altitude.
+        Ex-FAANG engineer turned multi-venture founder. I build at the intersection of technology,
+        consciousness, and human performance — and spend the rest of my time venturing,
+        doing extreme sports, pouring tea, or going inward.
       </p>
 
       <div className="flex gap-2 flex-wrap justify-center mb-10">
-        {["San Francisco", "Patagonia (soon)", "Building 3 startups", "INFJ"].map(tag => (
+        {["San Francisco", "Argentine roots", "Building 3 startups", "INFJ"].map(tag => (
           <span key={tag}
             className="px-3 py-1 text-[#8B9DAF] text-xs border border-[#704214]/40 rounded-sm"
             style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.08)" }}>
@@ -138,118 +139,72 @@ function HeroSlide({ next }) {
   );
 }
 
-function VenturesSlide() {
+function ProjectsSlide() {
   return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
-      <CartoucheLabel>Current Ventures</CartoucheLabel>
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-4xl mx-auto w-full">
+      <CartoucheLabel>What I'm Building</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
-        style={{ fontFamily: "Playfair Display, serif" }}>What I'm Building</h2>
+        style={{ fontFamily: "Playfair Display, serif" }}>Projects</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Building at the intersection of consciousness tech, developer tools, and physical wellness.
+        Consciousness tech, developer tools, physical wellness, and research.
       </p>
       <AlchemicalDivider />
-      <div className="grid gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {[
           {
             glyph: "◎",
             name: "Attune",
-            desc: "Virtual coworking meets emotional development — Focusmate for EQ. 7 practice modalities, facilitator marketplace, Wayfinder assessment (Cook-Greuter), and a trophy system that rewards inner work.",
-            tags: ["Next.js", "LiveKit", "PostgreSQL", "Consciousness Tech"],
+            desc: "Virtual coworking meets emotional development — Focusmate for EQ. Practice modalities, facilitator marketplace, and a trophy system that rewards inner work.",
+            tags: ["Consciousness Tech", "Next.js", "LiveKit"],
             accent: "#6B3FA0",
           },
           {
             glyph: "✧",
             name: "Quill",
-            desc: "Open-source, local-first audio transcription. 8 adapters (WhisperX, Parakeet, Canary), speaker diarization, AI chat with your transcripts, and native Obsidian integration. Privacy by default.",
-            tags: ["Go", "React", "Electron", "Open Source"],
+            desc: "Open-source, local-first audio transcription. 8 adapters, speaker diarization, AI chat with your transcripts, and native Obsidian integration.",
+            tags: ["Go", "React", "Open Source"],
             accent: "#4A8B7F",
           },
           {
             glyph: "☀",
             name: "Red Light Throne",
-            desc: "Red light therapy where the sun don't shine. A wellness hardware product disguised as a pre-launch landing page — currently building waitlist and validating demand.",
+            desc: "Red light therapy where the sun don't shine. A wellness hardware product — currently building waitlist and validating demand.",
             tags: ["Hardware", "Wellness", "Pre-Launch"],
             accent: "#D4A843",
           },
-        ].map(v => (
-          <div key={v.name} className="card-alchemist flex gap-4 p-5 rounded-sm"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-2xl flex-shrink-0 w-8 text-center" style={{ color: v.accent }}>{v.glyph}</span>
-            <div>
-              <h3 className="text-[#EDE0CC] font-semibold text-base mb-1"
-                style={{ fontFamily: "Playfair Display, serif" }}>{v.name}</h3>
-              <p className="text-[#8B9DAF] text-sm mb-3 leading-relaxed"
-                style={{ fontFamily: "Lora, serif" }}>{v.desc}</p>
-              <div className="flex gap-2 flex-wrap">
-                {v.tags.map(t => (
-                  <span key={t} className="text-xs px-2 py-0.5 border border-[#704214]/40 text-[#C17817]"
-                    style={{ fontFamily: "Inter, sans-serif", background: "rgba(193,120,23,0.08)" }}>
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ProjectsSlide() {
-  return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
-      <CartoucheLabel>Infrastructure & Research</CartoucheLabel>
-      <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
-        style={{ fontFamily: "Playfair Display, serif" }}>Systems & Research</h2>
-      <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Multi-agent systems, content intelligence, and the tools behind the ventures.
-      </p>
-      <AlchemicalDivider />
-      <div className="grid gap-4">
-        {[
           {
-            symbol: "⬡",
+            glyph: "⬡",
             name: "OpenClaw",
-            desc: "A multi-agent operating system built on the Working Geniuses framework. Six specialized agents — Atlas, Orchestrator, Venture, Invention, Gal, Build — each with persistent memory, coordinating through a shared workspace to run my entire venture portfolio.",
-            tags: ["Multi-Agent", "Working Geniuses", "Claude"],
-            status: "Active",
+            desc: "Multi-agent operating system built on the Working Geniuses framework. Six specialized agents coordinating through a shared workspace.",
+            tags: ["Multi-Agent", "Claude", "AI"],
+            accent: "#D4A843",
           },
           {
-            symbol: "✧",
+            glyph: "◈",
             name: "ContentOS",
-            desc: "Three-agent content intelligence pipeline: strategy bible generation from a 15-question psychological profile, automated market research, and content brief creation. Feeds into an AI video pipeline using Kling 2.x and Seedance 2.0.",
+            desc: "Three-agent content intelligence pipeline: strategy bible, automated research, and content briefs. Feeds into an AI video pipeline.",
             tags: ["Content", "AI Pipeline", "Strategy"],
-            status: "Active",
+            accent: "#4A8B7F",
           },
           {
-            symbol: "∿",
+            glyph: "∿",
             name: "Quantum-Like Brain Dynamics",
-            desc: "Exploring the Deco-Kringelbach work on quantum-like network topology in fMRI data — how classical oscillator networks can produce quantum interference patterns, and what that implies for consciousness research.",
-            tags: ["Neuroscience", "Research", "Systems"],
-            status: "Exploring",
+            desc: "Exploring quantum-like network topology in fMRI data — how classical oscillator networks produce quantum interference patterns.",
+            tags: ["Neuroscience", "Research"],
+            accent: "#6B3FA0",
           },
-        ].map(p => (
-          <div key={p.name} className="card-alchemist flex gap-4 p-5 rounded-sm"
+        ].map(v => (
+          <div key={v.name} className="card-alchemist flex gap-3 p-5 rounded-sm"
             style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-xl flex-shrink-0 w-8 text-center text-[#D4A843] opacity-70 mt-1">{p.symbol}</span>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <h3 className="text-[#EDE0CC] font-semibold text-base"
-                  style={{ fontFamily: "Playfair Display, serif" }}>{p.name}</h3>
-                <span className={`text-xs px-2 py-0.5 border ${
-                  p.status === "Active"
-                    ? "border-[#4A8B7F]/40 text-[#4A8B7F] bg-[#4A8B7F]/08"
-                    : "border-[#6B3FA0]/40 text-[#6B3FA0] bg-[#6B3FA0]/08"
-                }`} style={{ fontFamily: "Inter, sans-serif" }}>
-                  {p.status}
-                </span>
-              </div>
-              <p className="text-[#8B9DAF] text-sm mb-3 leading-relaxed"
-                style={{ fontFamily: "Lora, serif" }}>{p.desc}</p>
-              <div className="flex gap-2 flex-wrap">
-                {p.tags.map(t => (
-                  <span key={t} className="text-xs px-2 py-0.5 border border-[#704214]/40 text-[#C17817]"
+            <span className="text-xl flex-shrink-0 w-7 text-center mt-0.5" style={{ color: v.accent }}>{v.glyph}</span>
+            <div>
+              <h3 className="text-[#EDE0CC] font-semibold text-sm mb-1"
+                style={{ fontFamily: "Playfair Display, serif" }}>{v.name}</h3>
+              <p className="text-[#8B9DAF] text-xs mb-2 leading-relaxed"
+                style={{ fontFamily: "Lora, serif" }}>{v.desc}</p>
+              <div className="flex gap-1.5 flex-wrap">
+                {v.tags.map(t => (
+                  <span key={t} className="text-[10px] px-1.5 py-0.5 border border-[#704214]/40 text-[#C17817]"
                     style={{ fontFamily: "Inter, sans-serif", background: "rgba(193,120,23,0.08)" }}>
                     {t}
                   </span>
@@ -265,25 +220,26 @@ function ProjectsSlide() {
 
 function AthleticsSlide() {
   return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
       <CartoucheLabel>Physical Terrain</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
-        style={{ fontFamily: "Playfair Display, serif" }}>Physical Pursuits</h2>
+        style={{ fontFamily: "Playfair Display, serif" }}>Movement & Sport</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Extreme sports as a lens for pushing edges — physical and psychological.
+        Life is the true marathon. This is just training for that.
       </p>
       <AlchemicalDivider />
-      <div className="grid grid-cols-2 gap-3 mb-5">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         {[
-          { symbol: "◌", name: "Endurance Running", detail: "Long-distance & trail" },
-          { symbol: "△", name: "Climbing", detail: "Multi-pitch & bouldering" },
+          { symbol: "◌", name: "Trail Running", detail: "Marathons, ultras, Born to Run philosophy" },
+          { symbol: "◇", name: "Freediving", detail: "Breath, depth, stillness" },
+          { symbol: "△", name: "Climbing", detail: "Bouldering & outdoor rock" },
+          { symbol: "◆", name: "Tennis", detail: "Competitive play & technique study" },
           { symbol: "≋", name: "Swimming", detail: "Open water & laps" },
-          { symbol: "◇", name: "Tennis", detail: "Competitive play" },
-          { symbol: "⊕", name: "Yoga", detail: "Somatic integration" },
+          { symbol: "⊕", name: "Cycling", detail: "Endurance cross-training" },
         ].map(a => (
-          <div key={a.name} className="card-alchemist p-4 rounded-sm flex items-center gap-3"
+          <div key={a.name} className="card-alchemist p-5 rounded-sm flex items-center gap-4"
             style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-lg w-6 text-center flex-shrink-0">{a.symbol}</span>
+            <span className="text-[#D4A843] text-xl w-7 text-center flex-shrink-0">{a.symbol}</span>
             <div>
               <p className="text-[#EDE0CC] font-medium text-sm"
                 style={{ fontFamily: "Playfair Display, serif" }}>{a.name}</p>
@@ -292,24 +248,13 @@ function AthleticsSlide() {
             </div>
           </div>
         ))}
-        <div className="card-alchemist p-4 rounded-sm flex items-center gap-3 breathing-glow"
-          style={{ background: "rgba(212,168,67,0.06)", borderColor: "rgba(212,168,67,0.3)" }}>
-          <span className="text-[#D4A843] text-lg w-6 text-center flex-shrink-0">⛰</span>
-          <div>
-            <p className="text-[#D4A843] font-medium text-sm"
-              style={{ fontFamily: "Playfair Display, serif" }}>Patagonia Retreat</p>
-            <p className="text-[#C17817]/60 text-xs mt-0.5"
-              style={{ fontFamily: "Inter, sans-serif" }}>Future vision</p>
-          </div>
-        </div>
       </div>
-      <div className="card-alchemist p-4 rounded-sm"
+      <div className="card-alchemist p-5 rounded-sm"
         style={{ background: "rgba(44,24,16,0.2)" }}>
         <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
           style={{ fontFamily: "Lora, serif" }}>
-          "I approach training with the same systems-thinking mindset I'd bring to an engineering
-          problem — optimizing for recovery protocols, TCM integration, and long-term body
-          intelligence over short-term PRs."
+          "If you get tired, learn to rest, not to quit. Come back from every setback stronger —
+          Achilles tendinitis, broken ankle, IT band. The body is the instrument."
         </p>
       </div>
     </div>
@@ -318,49 +263,49 @@ function AthleticsSlide() {
 
 function PhilosophySlide() {
   return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
       <CartoucheLabel>The Legend</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
-        style={{ fontFamily: "Playfair Display, serif" }}>Mental Models</h2>
+        style={{ fontFamily: "Playfair Display, serif" }}>What I Live By</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        The frameworks I actually live by.
+        Strong opinions, loosely held. These are the current ones.
       </p>
       <AlchemicalDivider />
-      <div className="grid gap-3">
+      <div className="grid gap-4">
         {[
           {
-            glyph: "⊞",
-            theme: "Systems over hacks",
-            desc: "Sustainable change comes from understanding the system, not gaming individual variables.",
+            glyph: "◯",
+            theme: "Peace as north star",
+            desc: "A couple of years ago I decided to make being at peace my main goal in life. Happiness is peace in motion.",
           },
           {
-            glyph: "⊗",
-            theme: "Science + tradition, not science vs.",
-            desc: "TCM, Daoist philosophy, somatic theory, and Western research are different resolution levels of the same terrain.",
+            glyph: "⊕",
+            theme: "The warrior's garden",
+            desc: "I'd rather be a warrior in a garden than a gardener in a war. Stay sharp, stay gentle.",
           },
           {
             glyph: "◎",
-            theme: "Emotional intelligence as primary leverage",
-            desc: "Most performance blockers are emotional, not informational. Cook-Greuter, IFS, Kessler — inner architecture first.",
-          },
-          {
-            glyph: "₿",
-            theme: "Sound money, Austrian foundations",
-            desc: "Bitcoin as first principles — Austrian economics, time preference, and the importance of self-sovereignty.",
+            theme: "Simplicity over complexity",
+            desc: "Removal over addition. Always leave things better than you found them. Life is really simple — we insist on making it complicated.",
           },
           {
             glyph: "∞",
-            theme: "INFJ / Schizoid pattern awareness",
-            desc: "High idealism, selective depth, aversion to surface-level engagement. I build for the few rather than the many.",
+            theme: "Play the long game",
+            desc: "You don't rise to the level of your goals, you fall to the level of your habits. Be not afraid of growing slowly; be afraid only of standing still.",
+          },
+          {
+            glyph: "⊞",
+            theme: "You are what you do",
+            desc: "Not what you say you'll do. Data-driven in business, intuition-driven in life. Curiosity will conquer fear more than bravery ever will.",
           },
         ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-4 rounded-sm"
+          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm"
             style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-base flex-shrink-0 w-6 text-center mt-0.5">{f.glyph}</span>
+            <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
             <div>
-              <p className="text-[#EDE0CC] font-semibold text-sm"
+              <p className="text-[#EDE0CC] font-semibold text-base"
                 style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
-              <p className="text-[#8B9DAF] text-xs leading-relaxed mt-1"
+              <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
                 style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
             </div>
           </div>
@@ -378,55 +323,63 @@ function RecommendationsSlide() {
       label: "Books",
       glyph: "📖",
       items: [
-        { name: "In Search of the Miraculous", author: "P.D. Ouspensky", note: "The clearest map of inner work I've found." },
-        { name: "The Body Keeps the Score", author: "Bessel van der Kolk", note: "How trauma lives in the body. Essential foundation." },
-        { name: "Ego Development", author: "Susanne Cook-Greuter", note: "The most rigorous framework for adult development." },
-        { name: "The Bitcoin Standard", author: "Saifedean Ammous", note: "First principles thinking about money and time." },
-        { name: "Radical Acceptance", author: "Tara Brach", note: "The cleanest entry point into somatic self-inquiry." },
+        { name: "Surely You're Joking, Mr. Feynman", author: "Richard Feynman", note: "Curiosity as a way of life. The patron saint of cool nerds." },
+        { name: "Born to Run", author: "Christopher McDougall", note: "Changed how I think about running, feet, and what humans are built for." },
+        { name: "Zero to One", author: "Peter Thiel", note: "Contrarian thinking applied to building. Focus on one thing." },
+        { name: "The Untethered Soul", author: "Michael Singer", note: "The clearest map of inner work I've found. Read it twice a year." },
+        { name: "Things Hidden Since the Foundation of the World", author: "Rene Girard", note: "Mimetic desire explains most of human behavior. Uncomfortable and true." },
       ],
     },
     tools: {
       label: "Tools",
       glyph: "⚙",
       items: [
-        { name: "Obsidian", note: "Second brain. Local-first, markdown, no lock-in." },
-        { name: "Linear", note: "Best issue tracker. No ceremony." },
-        { name: "Claude API", note: "LLM of choice for psychological assessment work." },
-        { name: "Cursor", note: "AI-native code editor — biggest productivity unlock this year." },
-        { name: "Replit", note: "Fast prototyping when I need to ship an idea in an hour." },
+        { name: "Obsidian", note: "Second brain. Local-first markdown, no lock-in." },
+        { name: "MacWhisper", note: "Local audio transcription. Fast, private, runs on-device." },
+        { name: "VoiceLink", note: "Voice-first communication. Clean and simple." },
+        { name: "Ocean", note: "Personality insights and self-understanding." },
+        { name: "OpenClaw", note: "My multi-agent OS. Six agents running the venture portfolio." },
+        { name: "Co-Pilot", note: "AI pair programming. Second pair of hands in the editor." },
+        { name: "Signal", note: "Encrypted messaging. Privacy by default." },
       ],
     },
     gear: {
       label: "Gear",
       glyph: "⛺",
       items: [
-        { name: "HOKA Speedgoat 5", note: "Trail running. Nothing else comes close for long days." },
-        { name: "La Sportiva Mythos", note: "All-day climbing comfort. Versatile across styles." },
-        { name: "Coros Vertix 2S", note: "GPS watch. Battery life that doesn't get in the way." },
-        { name: "Theragun Pro", note: "Recovery tool I actually use. Worth it." },
-        { name: "Lululemon Pace Breaker", note: "Best running short. Tested on 30+ mile weeks." },
+        { name: "Shaman Warrior Sandals", note: "Minimalist running sandals. Born to Run philosophy on your feet." },
+        { name: "Garmin Watch", note: "Running, HRV, training load. The data layer for everything physical." },
+        { name: "Fuji XS-10 / X100V", note: "Film and digital. The Fuji colors are unmatched for street and travel." },
+        { name: "La Sportiva TC Pro", note: "High-performance climbing shoe. Precision on rock." },
+        { name: "Massage Gun", note: "Daily recovery tool. Quick and effective between sessions." },
+        { name: "Spiky Lacrosse Ball", note: "Roll out your feet. Simple, cheap, life-changing for runners." },
       ],
     },
     food: {
       label: "Food",
       glyph: "⚗",
       items: [
-        { name: "Nose-to-Tail Eating", note: "Organ meats, bone broth. High-nutrient density, low processed input." },
-        { name: "Ancestral Sourcing", note: "Grass-fed, pasture-raised, wild-caught. Source > calories." },
-        { name: "Intermittent Fasting", note: "16:8 as default. Simplifies decisions, sharpens mornings." },
-        { name: "Magnesium Glycinate", note: "Non-negotiable supplement. Sleep quality changed." },
-        { name: "Raw Dairy", note: "When you can source it properly. Different product than pasteurized." },
+        { name: "Nona's Argentine Recipes", note: "Family recipes from my grandmother. The foundation of everything I cook." },
+        { name: "Fries Friday", note: "Weekly tradition — friends over, fries from a different spot each time." },
+        { name: "Isabelle Page Recipe Book", note: "Vegan cookbook. Clean, creative plant-based cooking." },
+        { name: "Fasting Protocols", note: "3-day water fast quarterly. Monthly one-day fasts. Reset the system." },
+        { name: "No Alcohol, No Caffeine", note: "Dropped both. Sleep quality and morning clarity made it permanent." },
+        { name: "Ancestral Sourcing", note: "Grass-fed, pasture-raised, wild-caught. Source matters more than calories." },
       ],
     },
     fitness: {
       label: "Fitness",
       glyph: "◉",
       items: [
-        { name: "Zone 2 Training", note: "80% of volume here. Aerobic base is everything." },
-        { name: "Yoga Nidra", note: "40 min = 4 hrs sleep in terms of nervous system reset." },
-        { name: "Cold Exposure", note: "Morning cold shower. Sets tone for the day. Not optional." },
-        { name: "Andrew Huberman Protocol", note: "Morning sunlight, no caffeine for 90min, delayed eating." },
-        { name: "HRV Tracking", note: "Single best readiness metric. Overrides how you 'feel'." },
+        { name: "Zone 2 Training", note: "80% of volume here. Aerobic base is everything for longevity." },
+        { name: "5x5 Strength Training", note: "Compound lifts, progressive overload. Simple and effective." },
+        { name: "Kettlebell Training", note: "Functional strength, grip, posterior chain. The one tool that does it all." },
+        { name: "Knees Over Toes", note: "Ben Patrick methodology. Bulletproof joints, injury-proof movement." },
+        { name: "Yoga", note: "Flexibility, breath, body awareness. The counterbalance to everything else." },
+        { name: "Sauna", note: "Heat exposure for recovery, growth hormone, and mental reset." },
+        { name: "Morning Stack", note: "Grounding barefoot, morning sunlight, breathwork. Non-negotiable first hour." },
+        { name: "Sunning Naked", note: "Full-body sun exposure. Vitamin D the way nature intended." },
+        { name: "Bryan Johnson Blueprint", note: "Track food, supplements, biomarkers. What gets measured gets managed." },
       ],
     },
   };
@@ -435,7 +388,7 @@ function RecommendationsSlide() {
   const current = recs[activeTab];
 
   return (
-    <div className="px-8 py-8 h-full flex flex-col max-w-2xl mx-auto w-full">
+    <div className="px-8 py-12 h-full flex flex-col max-w-3xl mx-auto w-full">
       <CartoucheLabel>The Codex</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Recommendations</h2>
@@ -493,9 +446,66 @@ function RecommendationsSlide() {
   );
 }
 
+function InnerWorkSlide() {
+  return (
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
+      <CartoucheLabel>Inner Cartography</CartoucheLabel>
+      <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
+        style={{ fontFamily: "Playfair Display, serif" }}>Consciousness & Community</h2>
+      <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
+        An engineer's approach to the inner world. No dogma — just practice.
+      </p>
+      <AlchemicalDivider />
+      <div className="grid gap-4">
+        {[
+          {
+            glyph: "⊛",
+            theme: "Tea House",
+            desc: "Weekly volunteering at a community tea house — pouring tea, holding space, building connection one cup at a time.",
+          },
+          {
+            glyph: "∿",
+            theme: "Psychedelic Safety",
+            desc: "Zendo Project volunteer. Harm reduction at festivals, trip sitting for friends. Safety, set, setting, and dosing always come first.",
+          },
+          {
+            glyph: "◎",
+            theme: "Morning Practice",
+            desc: "Grounding barefoot, morning sunlight, breathwork, 8+ hours of sleep. The purpose of my day is to let go of my blockages and grow.",
+          },
+          {
+            glyph: "✦",
+            theme: "Community as Practice",
+            desc: "Men's group, intentional gatherings, Burning Man. The best game in life is making the most amount of friends possible.",
+          },
+        ].map(f => (
+          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm"
+            style={{ background: "rgba(44,24,16,0.3)" }}>
+            <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
+            <div>
+              <p className="text-[#EDE0CC] font-semibold text-base"
+                style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
+              <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
+                style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="card-alchemist p-5 rounded-sm mt-5"
+        style={{ background: "rgba(44,24,16,0.2)" }}>
+        <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
+          style={{ fontFamily: "Lora, serif" }}>
+          "Yesterday I was clever, so I wanted to change the world.
+          Today I am wise, so I am changing myself." — Rumi
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function VisionSlide() {
   return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-3xl mx-auto w-full">
       <div className="relative mb-8">
         <CompassRose size={80} className="opacity-60" />
         <div className="absolute inset-0 rounded-full breathing-glow"
@@ -507,23 +517,39 @@ function VisionSlide() {
         style={{ fontFamily: "Playfair Display, serif" }}>Where I'm Headed</h2>
       <AlchemicalDivider />
 
-      <p className="text-[#8B9DAF] max-w-lg mb-8 leading-relaxed"
+      <p className="text-[#8B9DAF] max-w-xl mb-8 leading-relaxed"
         style={{ fontFamily: "Lora, serif" }}>
-        The endgame is a high-end retreat center in Patagonia — a physical home for everything
-        I'm building in the digital space. A place where serious people come to do serious inner
-        work, with the best facilitators, the best environment, and the right containers.
+        The endgame is a physical home for everything I'm building in the digital space —
+        tools that help people grow, create, and connect. And eventually, a place to live it.
       </p>
 
-      <div className="grid grid-cols-3 gap-4 w-full max-w-lg mb-8">
+      <div className="grid gap-4 w-full max-w-xl mb-8">
         {[
-          { label: "Emotional Wellness", glyph: "◎" },
-          { label: "Psychedelic Creativity", glyph: "∿" },
-          { label: "Patagonian Landscape", glyph: "⛰" },
+          {
+            label: "Tools for Emotional Wellness",
+            glyph: "◎",
+            desc: "Building technology that helps people grow emotionally — assessment tooling, practice platforms, and facilitator infrastructure.",
+          },
+          {
+            label: "Tools for Creativity",
+            glyph: "∿",
+            desc: "Psychedelic creativity, consciousness research, and AI systems that amplify human expression and insight.",
+          },
+          {
+            label: "Patagonian Village",
+            glyph: "⛰",
+            desc: "A place to live, a community, a home. A high-end retreat center and intentional village in the Patagonian landscape.",
+          },
         ].map(p => (
-          <div key={p.label} className="card-alchemist p-4 rounded-sm flex flex-col items-center gap-2"
+          <div key={p.label} className="card-alchemist p-5 rounded-sm flex gap-4 items-start text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-2xl">{p.glyph}</span>
-            <p className="text-[#8B9DAF] text-xs" style={{ fontFamily: "Inter, sans-serif" }}>{p.label}</p>
+            <span className="text-[#D4A843] text-2xl flex-shrink-0 mt-0.5">{p.glyph}</span>
+            <div>
+              <p className="text-[#EDE0CC] font-semibold text-sm mb-1"
+                style={{ fontFamily: "Playfair Display, serif" }}>{p.label}</p>
+              <p className="text-[#8B9DAF] text-xs leading-relaxed"
+                style={{ fontFamily: "Lora, serif" }}>{p.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -537,7 +563,7 @@ function VisionSlide() {
 
 function ConnectSlide() {
   return (
-    <div className="px-8 py-8 min-h-full flex flex-col justify-center items-center text-center max-w-2xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-3xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
@@ -545,24 +571,25 @@ function ConnectSlide() {
 
       <p className="text-[#8B9DAF] max-w-lg mb-8 leading-relaxed"
         style={{ fontFamily: "Lora, serif" }}>
-        I'm interested in conversations around psychedelics + medicine, psychological assessment
-        tooling, sound money, extreme athletics, and anyone building something genuinely meaningful.
+        I'm interested in conversations around consciousness, community building, extreme athletics,
+        sound money, and anyone building something genuinely meaningful. If you're here, you probably
+        make my life better — not worse.
       </p>
 
-      <div className="grid gap-3 w-full max-w-sm mb-8">
+      <div className="grid gap-4 w-full max-w-md mb-8">
         {[
           {
             label: "Ideal collaborators",
             glyph: "◈",
-            items: ["Therapists & facilitators", "Operators in wellness / food", "Engineers who've gone indie"],
+            items: ["Therapists & facilitators", "Engineers who've gone indie", "Community builders & retreat operators"],
           },
           {
             label: "What I'm curious about",
             glyph: "✦",
-            items: ["Ego development research", "Regenerative food systems", "Somatic & psychedelic science"],
+            items: ["Consciousness research & psychedelic science", "Longevity & biohacking", "Intentional communities"],
           },
         ].map(s => (
-          <div key={s.label} className="card-alchemist p-4 rounded-sm text-left"
+          <div key={s.label} className="card-alchemist p-5 rounded-sm text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-[#D4A843] text-xs">{s.glyph}</span>
@@ -578,14 +605,11 @@ function ConnectSlide() {
       </div>
 
       <div className="flex gap-3">
-        <button className="wax-seal px-6 py-2.5 rounded-sm text-sm tracking-wide"
-          style={{ fontFamily: "Inter, sans-serif" }}>
-          Get in Touch
-        </button>
-        <button className="px-6 py-2.5 text-sm border border-[#704214]/50 text-[#8B9DAF] rounded-sm transition-all hover:border-[#D4A843]/40 hover:text-[#EDE0CC]"
-          style={{ fontFamily: "Inter, sans-serif", background: "rgba(44,24,16,0.2)", cursor: "pointer" }}>
-          Twitter / X
-        </button>
+        <a href="https://instagram.com/whereintheworldisnico" target="_blank" rel="noopener noreferrer"
+          className="wax-seal px-6 py-2.5 rounded-sm text-sm tracking-wide inline-flex items-center gap-2"
+          style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
+          Instagram →
+        </a>
       </div>
     </div>
   );
@@ -595,11 +619,11 @@ function ConnectSlide() {
 
 const slides = [
   { id: "hero",            label: "Home",            Component: HeroSlide },
-  { id: "ventures",        label: "Ventures",        Component: VenturesSlide },
   { id: "projects",        label: "Projects",        Component: ProjectsSlide },
   { id: "athletics",       label: "Athletics",       Component: AthleticsSlide },
   { id: "philosophy",      label: "Philosophy",      Component: PhilosophySlide },
   { id: "recommendations", label: "Codex",           Component: RecommendationsSlide },
+  { id: "innerwork",       label: "Inner Work",      Component: InnerWorkSlide },
   { id: "vision",          label: "Vision",          Component: VisionSlide },
   { id: "connect",         label: "Connect",         Component: ConnectSlide },
 ];
