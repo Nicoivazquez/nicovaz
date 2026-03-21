@@ -80,68 +80,227 @@ function GoldenMotes() {
   );
 }
 
+// ── Travel map ───────────────────────────────────────────────────────────────
+
+function TravelMap() {
+  const stops = [
+    { city: "Bali", months: "Jan – Mar", x: 810, y: 275, lx: 0, ly: 30, anchor: "middle", current: true },
+    { city: "Madrid", months: "Apr – May", x: 490, y: 120, lx: -15, ly: -18, anchor: "end" },
+    { city: "???", months: "Jun", x: 570, y: 140, lx: 18, ly: 5, anchor: "start", undecided: true },
+    { city: "Portugal", months: "Jul – Aug", x: 450, y: 155, lx: -18, ly: 18, anchor: "end" },
+    { city: "USA", months: "Sep – Oct", x: 185, y: 130, lx: 0, ly: -18, anchor: "middle" },
+    { city: "Argentina", months: "Nov →", x: 330, y: 370, lx: 0, ly: 30, anchor: "middle" },
+  ];
+
+  const routePath = "M 810 275 Q 650 140 490 120 Q 530 108 570 140 Q 510 125 450 155 Q 320 55 185 130 Q 220 250 330 370";
+
+  return (
+    <div className="max-w-6xl mx-auto w-full">
+      <div className="text-center mb-8">
+        <h3 className="text-4xl font-bold text-[#EDE0CC]"
+          style={{ fontFamily: "Playfair Display, serif" }}>
+          Expedition Log
+        </h3>
+      </div>
+
+      <div className="relative rounded-sm overflow-hidden border border-[#704214]/30"
+        style={{ background: "rgba(44,24,16,0.2)" }}>
+        <svg viewBox="0 0 1000 450" className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+          {/* Meridian & parallel grid */}
+          {Array.from({ length: 11 }, (_, i) => (
+            <line key={`v${i}`} x1={i * 100} y1="0" x2={i * 100} y2="450"
+              stroke="#704214" strokeWidth="0.5" opacity="0.08" />
+          ))}
+          {Array.from({ length: 5 }, (_, i) => (
+            <line key={`h${i}`} x1="0" y1={(i + 1) * 90} x2="1000" y2={(i + 1) * 90}
+              stroke="#704214" strokeWidth="0.5" opacity="0.08" />
+          ))}
+
+          {/* Continent silhouettes — faint, hand-drawn feel */}
+          {/* Europe */}
+          <path d="M435 88 L475 80 L520 86 L555 100 L575 118 L565 138 L545 148 L520 142 L495 138 L475 142 L455 152 L435 148 L418 135 L410 115 L420 98Z"
+            fill="#704214" opacity="0.07" />
+          {/* Africa */}
+          <path d="M430 162 L465 155 L510 160 L540 178 L548 215 L540 270 L522 325 L498 365 L472 385 L450 370 L438 325 L428 265 L425 208Z"
+            fill="#704214" opacity="0.05" />
+          {/* SE Asia */}
+          <path d="M705 168 L738 160 L768 170 L788 188 L800 212 L792 232 L772 248 L752 255 L732 248 L718 232 L710 208 L706 188Z"
+            fill="#704214" opacity="0.06" />
+          {/* Bali */}
+          <path d="M795 260 L815 255 L825 265 L818 278 L800 275Z"
+            fill="#704214" opacity="0.08" />
+          {/* North America */}
+          <path d="M95 58 L155 50 L222 65 L278 80 L298 102 L278 128 L258 150 L238 170 L218 182 L198 168 L168 150 L138 130 L118 102 L98 80Z"
+            fill="#704214" opacity="0.06" />
+          {/* South America */}
+          <path d="M258 252 L292 240 L322 250 L342 280 L352 322 L342 362 L322 392 L302 410 L282 400 L262 372 L252 332 L245 292 L250 265Z"
+            fill="#704214" opacity="0.06" />
+
+          {/* Ocean labels */}
+          <text x="345" y="255" textAnchor="middle" fill="#704214" fontSize="11" opacity="0.15"
+            fontFamily="Playfair Display, serif" fontStyle="italic" letterSpacing="8">ATLANTIC</text>
+          <text x="110" y="330" textAnchor="middle" fill="#704214" fontSize="10" opacity="0.12"
+            fontFamily="Playfair Display, serif" fontStyle="italic" letterSpacing="6">PACIFIC</text>
+          <text x="660" y="350" textAnchor="middle" fill="#704214" fontSize="10" opacity="0.12"
+            fontFamily="Playfair Display, serif" fontStyle="italic" letterSpacing="6">INDIAN OCEAN</text>
+
+          {/* Route glow */}
+          <path d={routePath} fill="none" stroke="#D4A843" strokeWidth="4" opacity="0.06" />
+          {/* Route dashed line */}
+          <path d={routePath} fill="none" stroke="#D4A843" strokeWidth="1.5"
+            strokeDasharray="8 4" opacity="0.5" />
+
+          {/* Stop markers and labels */}
+          {stops.map((s, i) => (
+            <g key={s.city}>
+              <circle cx={s.x} cy={s.y} r="8" fill="none" stroke="#D4A843"
+                strokeWidth="1" opacity={s.current ? "0.7" : "0.3"} />
+              <circle cx={s.x} cy={s.y} r="4"
+                fill={s.undecided ? "none" : "#D4A843"}
+                stroke={s.undecided ? "#D4A843" : "none"}
+                strokeWidth={s.undecided ? "1" : "0"}
+                strokeDasharray={s.undecided ? "2 2" : "none"}
+                opacity={s.current ? "1" : "0.6"} />
+              {s.current && (
+                <circle cx={s.x} cy={s.y} r="14" fill="none" stroke="#D4A843"
+                  strokeWidth="1" opacity="0.4"
+                  style={{ animation: "breathe 3s infinite" }} />
+              )}
+              <text x={s.x + s.lx} y={s.y + s.ly}
+                textAnchor={s.anchor} fill={s.undecided ? "#8B9DAF" : "#EDE0CC"}
+                fontSize="13" fontFamily="Playfair Display, serif" fontWeight="600"
+                fontStyle={s.undecided ? "italic" : "normal"}>
+                {s.city}
+              </text>
+              <text x={s.x + s.lx} y={s.y + s.ly + 14}
+                textAnchor={s.anchor} fill="#D4A843" fontSize="9"
+                fontFamily="Inter, sans-serif" opacity="0.6">
+                {s.months}
+              </text>
+            </g>
+          ))}
+
+          {/* Compass rose */}
+          <g transform="translate(910, 380) scale(0.45)" opacity="0.35">
+            <circle cx="50" cy="50" r="46" stroke="#D4A843" strokeWidth="1" />
+            <path d="M50 4 L55 46 L50 50 L45 46Z" fill="#D4A843" opacity="0.9" />
+            <path d="M50 96 L55 54 L50 50 L45 54Z" fill="#D4A843" opacity="0.4" />
+            <path d="M4 50 L46 45 L50 50 L46 55Z" fill="#D4A843" opacity="0.4" />
+            <path d="M96 50 L54 45 L50 50 L54 55Z" fill="#D4A843" opacity="0.9" />
+            <circle cx="50" cy="50" r="3" fill="#D4A843" />
+            <text x="50" y="18" textAnchor="middle" fill="#D4A843" fontSize="10"
+              fontFamily="Playfair Display, serif" fontWeight="700">N</text>
+          </g>
+        </svg>
+
+        {/* Legend */}
+        <div className="flex justify-center gap-6 py-3 border-t border-[#704214]/20">
+          <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
+            style={{ fontFamily: "Inter, sans-serif" }}>
+            <span className="w-2 h-2 rounded-full bg-[#D4A843] inline-block"
+              style={{ animation: "breathe 3s infinite" }} />
+            Now
+          </span>
+          <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
+            style={{ fontFamily: "Inter, sans-serif" }}>
+            <span className="w-2 h-2 rounded-full bg-[#D4A843] opacity-60 inline-block" />
+            Planned
+          </span>
+          <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
+            style={{ fontFamily: "Inter, sans-serif" }}>
+            <span className="w-2 h-2 rounded-full border border-dashed border-[#D4A843] inline-block" />
+            Undecided
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Slide content ────────────────────────────────────────────────────────────
 
 function HeroSlide({ next }) {
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-full text-center px-8 overflow-hidden">
+    <div className="relative overflow-hidden">
       {/* Background topographic lines */}
       <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: `repeating-radial-gradient(circle at 50% 50%, transparent, transparent 40px, #D4A843 40px, #D4A843 41px)`,
       }} />
       <GoldenMotes />
 
-      {/* Rotating compass */}
-      <div className="mb-8 relative">
-        <div style={{ animation: "compass-spin 60s linear infinite" }}>
-          <CompassRose size={96} />
+      {/* Hero content — centered in viewport */}
+      <div className="flex flex-col items-center justify-center min-h-full text-center px-8 relative">
+        {/* Rotating compass */}
+        <div className="mb-8 relative">
+          <div style={{ animation: "compass-spin 60s linear infinite" }}>
+            <CompassRose size={96} />
+          </div>
+          <div className="absolute inset-0 rounded-full breathing-glow"
+            style={{ boxShadow: "0 0 40px rgba(212,168,67,0.2)" }} />
         </div>
-        <div className="absolute inset-0 rounded-full breathing-glow"
-          style={{ boxShadow: "0 0 40px rgba(212,168,67,0.2)" }} />
+
+        {/* Cartouche title frame */}
+        <div className="relative mb-2 px-8 py-2 border border-[#D4A843]/30"
+          style={{ borderRadius: "8px 2px 8px 2px / 2px 8px 2px 8px" }}>
+          <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-[#D4A843]/60 to-transparent" />
+          <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-[#D4A843]/60 to-transparent" />
+          <h1 className="text-5xl font-bold text-[#EDE0CC] tracking-tight"
+            style={{ fontFamily: "Playfair Display, serif" }}>Nico</h1>
+        </div>
+
+        <p className="text-lg text-[#D4A843] mb-4 italic"
+          style={{ fontFamily: "Playfair Display, serif" }}>
+          Engineer → Founder → Explorer
+        </p>
+
+        <p className="text-[#8B9DAF] max-w-xl text-base leading-relaxed mb-8"
+          style={{ fontFamily: "Lora, serif" }}>
+          Ex-FAANG engineer turned multi-venture founder. I build at the intersection of technology,
+          consciousness, and human performance — and spend the rest of my time venturing,
+          doing extreme sports, pouring tea, or going inward.
+        </p>
+
+        <div className="flex gap-2 flex-wrap justify-center mb-10">
+          {["San Francisco", "Argentine roots", "Building 3 startups", "INFJ"].map(tag => (
+            <span key={tag}
+              className="px-3 py-1 text-[#8B9DAF] text-xs border border-[#704214]/40 rounded-sm"
+              style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.08)" }}>
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex gap-3 items-center">
+          <button onClick={next} className="wax-seal px-8 py-3 rounded-sm text-sm tracking-wide"
+            style={{ fontFamily: "Inter, sans-serif" }}>
+            Chart the Territory →
+          </button>
+          <a href="https://instagram.com/whereintheworldisnico" target="_blank" rel="noopener noreferrer"
+            className="px-5 py-3 rounded-sm text-sm tracking-wide border border-[#D4A843]/40 text-[#D4A843] hover:bg-[#D4A843]/10 transition-colors"
+            style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
+            Instagram →
+          </a>
+        </div>
+
+        {/* Scroll hint */}
+        <div className="mt-12 flex flex-col items-center gap-1 opacity-30">
+          <span className="text-[#D4A843] text-[10px] tracking-widest uppercase"
+            style={{ fontFamily: "Inter, sans-serif" }}>Scroll</span>
+          <span className="text-[#D4A843] text-sm animate-bounce">↓</span>
+        </div>
       </div>
 
-      {/* Cartouche title frame */}
-      <div className="relative mb-2 px-8 py-2 border border-[#D4A843]/30"
-        style={{ borderRadius: "8px 2px 8px 2px / 2px 8px 2px 8px" }}>
-        <div className="absolute -top-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-[#D4A843]/60 to-transparent" />
-        <div className="absolute -bottom-px left-4 right-4 h-px bg-gradient-to-r from-transparent via-[#D4A843]/60 to-transparent" />
-        <h1 className="text-5xl font-bold text-[#EDE0CC] tracking-tight"
-          style={{ fontFamily: "Playfair Display, serif" }}>Nico</h1>
+      {/* Travel map */}
+      <div className="px-6 py-16 flex items-center justify-center relative">
+        <TravelMap />
       </div>
-
-      <p className="text-lg text-[#D4A843] mb-4 italic"
-        style={{ fontFamily: "Playfair Display, serif" }}>
-        Engineer → Founder → Explorer
-      </p>
-
-      <p className="text-[#8B9DAF] max-w-xl text-base leading-relaxed mb-8"
-        style={{ fontFamily: "Lora, serif" }}>
-        Ex-FAANG engineer turned multi-venture founder. I build at the intersection of technology,
-        consciousness, and human performance — and spend the rest of my time venturing,
-        doing extreme sports, pouring tea, or going inward.
-      </p>
-
-      <div className="flex gap-2 flex-wrap justify-center mb-10">
-        {["San Francisco", "Argentine roots", "Building 3 startups", "INFJ"].map(tag => (
-          <span key={tag}
-            className="px-3 py-1 text-[#8B9DAF] text-xs border border-[#704214]/40 rounded-sm"
-            style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.08)" }}>
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      <button onClick={next} className="wax-seal px-8 py-3 rounded-sm text-sm tracking-wide"
-        style={{ fontFamily: "Inter, sans-serif" }}>
-        Chart the Territory →
-      </button>
     </div>
   );
 }
 
 function ProjectsSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>What I'm Building</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Projects</h2>
@@ -149,7 +308,7 @@ function ProjectsSlide() {
         Consciousness tech, developer tools, physical wellness, and research.
       </p>
       <AlchemicalDivider />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 w-full">
         {[
           {
             glyph: "◎",
@@ -194,7 +353,7 @@ function ProjectsSlide() {
             accent: "#6B3FA0",
           },
         ].map(v => (
-          <div key={v.name} className="card-alchemist flex gap-3 p-5 rounded-sm"
+          <div key={v.name} className="card-alchemist flex gap-3 p-5 rounded-sm text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <span className="text-xl flex-shrink-0 w-7 text-center mt-0.5" style={{ color: v.accent }}>{v.glyph}</span>
             <div>
@@ -220,7 +379,7 @@ function ProjectsSlide() {
 
 function AthleticsSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Physical Terrain</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Movement & Sport</h2>
@@ -228,7 +387,7 @@ function AthleticsSlide() {
         Life is the true marathon. This is just training for that.
       </p>
       <AlchemicalDivider />
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-2 gap-4 mb-6 w-full">
         {[
           { symbol: "◌", name: "Trail Running", detail: "Marathons, ultras, Born to Run philosophy" },
           { symbol: "◇", name: "Freediving", detail: "Breath, depth, stillness" },
@@ -237,7 +396,7 @@ function AthleticsSlide() {
           { symbol: "≋", name: "Swimming", detail: "Open water & laps" },
           { symbol: "⊕", name: "Cycling", detail: "Endurance cross-training" },
         ].map(a => (
-          <div key={a.name} className="card-alchemist p-5 rounded-sm flex items-center gap-4"
+          <div key={a.name} className="card-alchemist p-5 rounded-sm flex items-center gap-4 text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <span className="text-[#D4A843] text-xl w-7 text-center flex-shrink-0">{a.symbol}</span>
             <div>
@@ -249,7 +408,7 @@ function AthleticsSlide() {
           </div>
         ))}
       </div>
-      <div className="card-alchemist p-5 rounded-sm"
+      <div className="card-alchemist p-5 rounded-sm w-full text-left"
         style={{ background: "rgba(44,24,16,0.2)" }}>
         <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
           style={{ fontFamily: "Lora, serif" }}>
@@ -263,7 +422,7 @@ function AthleticsSlide() {
 
 function PhilosophySlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Legend</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>What I Live By</h2>
@@ -271,7 +430,7 @@ function PhilosophySlide() {
         Strong opinions, loosely held. These are the current ones.
       </p>
       <AlchemicalDivider />
-      <div className="grid gap-4">
+      <div className="grid gap-4 w-full">
         {[
           {
             glyph: "◯",
@@ -299,7 +458,7 @@ function PhilosophySlide() {
             desc: "Not what you say you'll do. Data-driven in business, intuition-driven in life. Curiosity will conquer fear more than bravery ever will.",
           },
         ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm"
+          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
             <div>
@@ -328,6 +487,18 @@ function RecommendationsSlide() {
         { name: "Zero to One", author: "Peter Thiel", note: "Contrarian thinking applied to building. Focus on one thing." },
         { name: "The Untethered Soul", author: "Michael Singer", note: "The clearest map of inner work I've found. Read it twice a year." },
         { name: "Things Hidden Since the Foundation of the World", author: "Rene Girard", note: "Mimetic desire explains most of human behavior. Uncomfortable and true." },
+        { name: "Dune", author: "Frank Herbert", note: "Politics, ecology, and power wrapped in sci-fi. The book that made me distrust messiahs." },
+        { name: "Einstein", author: "Walter Isaacson", note: "Imagination over credentials. The best ideas come from thought experiments and stubbornness." },
+        { name: "Homo Deus", author: "Yuval Noah Harari", note: "Where Sapiens ends, this begins — and the future it paints is equal parts thrilling and terrifying." },
+        { name: "Man's Search for Meaning", author: "Viktor E. Frankl", note: "You can't control what happens to you, but you always choose how you meet it." },
+        { name: "My Stroke of Insight", author: "Jill Bolte Taylor", note: "A brain scientist watches her own mind dissolve in real time. Rewired how I think about consciousness." },
+        { name: "Pre-Suasion", author: "Robert Cialdini", note: "What happens before you ask matters more than how you ask. Changed how I frame everything." },
+        { name: "Sapiens", author: "Yuval Noah Harari", note: "The story of us, told from so far back that all your assumptions start to feel arbitrary." },
+        { name: "Stealing Fire", author: "Steven Kotler & Jamie Wheal", note: "Altered states aren't fringe — they're how SEALs, Silicon Valley, and athletes find the edge." },
+        { name: "The Surrender Experiment", author: "Michael Singer", note: "What happens when you stop forcing life and just say yes. Quietly the most radical book on this list." },
+        { name: "The Yoga of Eating", author: "Charles Eisenstein", note: "Threw out every diet rule and replaced them with one: listen to your body." },
+        { name: "This Changes Everything", author: "Naomi Klein", note: "Climate isn't a sidebar issue — it's the issue that exposes everything broken about the system." },
+        { name: "Why We Sleep", author: "Matthew Walker", note: "Destroyed every excuse I had for sleeping less. The data is brutal and undeniable." },
       ],
     },
     tools: {
@@ -388,7 +559,7 @@ function RecommendationsSlide() {
   const current = recs[activeTab];
 
   return (
-    <div className="px-8 py-12 h-full flex flex-col max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Codex</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Recommendations</h2>
@@ -397,33 +568,30 @@ function RecommendationsSlide() {
       </p>
 
       {/* Tab bar */}
-      <div className="flex gap-1 mb-5 border-b border-[#704214]/30 pb-0">
+      <div className="flex gap-2 mb-6 justify-center flex-wrap">
         {tabs.map(([key, val]) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className="px-4 py-2 text-xs transition-all relative flex-shrink-0"
+            className="px-5 py-2.5 text-sm font-medium tracking-wide transition-all rounded-sm"
             style={{
-              fontFamily: "Inter, sans-serif",
-              color: activeTab === key ? "#D4A843" : "#704214",
-              background: "transparent",
-              border: "none",
+              fontFamily: "Playfair Display, serif",
+              color: activeTab === key ? "#EDE0CC" : "#704214",
+              background: activeTab === key ? "rgba(212,168,67,0.15)" : "rgba(44,24,16,0.3)",
+              border: activeTab === key ? "1px solid rgba(212,168,67,0.5)" : "1px solid rgba(112,66,20,0.3)",
               cursor: "pointer",
             }}
           >
+            <span className="mr-2">{val.glyph}</span>
             {val.label}
-            {activeTab === key && (
-              <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-[#D4A843]"
-                style={{ borderRadius: "40% 60% 50% 50%" }} />
-            )}
           </button>
         ))}
       </div>
 
       {/* Items */}
-      <div className="flex flex-col gap-3 overflow-y-auto flex-1">
+      <div className="flex flex-col gap-3 w-full">
         {current.items.map((item, i) => (
-          <div key={item.name} className="card-alchemist flex gap-4 p-4 rounded-sm"
+          <div key={item.name} className="card-alchemist flex gap-4 p-4 rounded-sm text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <span className="text-[#704214]/50 text-xs mt-1 flex-shrink-0 w-4 text-right"
               style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
@@ -448,7 +616,7 @@ function RecommendationsSlide() {
 
 function InnerWorkSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Inner Cartography</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Consciousness & Community</h2>
@@ -456,7 +624,7 @@ function InnerWorkSlide() {
         An engineer's approach to the inner world. No dogma — just practice.
       </p>
       <AlchemicalDivider />
-      <div className="grid gap-4">
+      <div className="grid gap-4 w-full">
         {[
           {
             glyph: "⊛",
@@ -479,7 +647,7 @@ function InnerWorkSlide() {
             desc: "Men's group, intentional gatherings, Burning Man. The best game in life is making the most amount of friends possible.",
           },
         ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm"
+          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
             style={{ background: "rgba(44,24,16,0.3)" }}>
             <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
             <div>
@@ -491,7 +659,7 @@ function InnerWorkSlide() {
           </div>
         ))}
       </div>
-      <div className="card-alchemist p-5 rounded-sm mt-5"
+      <div className="card-alchemist p-5 rounded-sm mt-5 w-full text-left"
         style={{ background: "rgba(44,24,16,0.2)" }}>
         <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
           style={{ fontFamily: "Lora, serif" }}>
@@ -505,7 +673,7 @@ function InnerWorkSlide() {
 
 function VisionSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <div className="relative mb-8">
         <CompassRose size={80} className="opacity-60" />
         <div className="absolute inset-0 rounded-full breathing-glow"
@@ -517,13 +685,13 @@ function VisionSlide() {
         style={{ fontFamily: "Playfair Display, serif" }}>Where I'm Headed</h2>
       <AlchemicalDivider />
 
-      <p className="text-[#8B9DAF] max-w-xl mb-8 leading-relaxed"
+      <p className="text-[#8B9DAF] max-w-3xl mb-8 leading-relaxed"
         style={{ fontFamily: "Lora, serif" }}>
         The endgame is a physical home for everything I'm building in the digital space —
         tools that help people grow, create, and connect. And eventually, a place to live it.
       </p>
 
-      <div className="grid gap-4 w-full max-w-xl mb-8">
+      <div className="grid gap-4 w-full max-w-3xl mb-8">
         {[
           {
             label: "Tools for Emotional Wellness",
@@ -563,20 +731,20 @@ function VisionSlide() {
 
 function ConnectSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-3xl mx-auto w-full">
+    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
       <AlchemicalDivider />
 
-      <p className="text-[#8B9DAF] max-w-lg mb-8 leading-relaxed"
+      <p className="text-[#8B9DAF] max-w-3xl mb-8 leading-relaxed"
         style={{ fontFamily: "Lora, serif" }}>
         I'm interested in conversations around consciousness, community building, extreme athletics,
         sound money, and anyone building something genuinely meaningful. If you're here, you probably
         make my life better — not worse.
       </p>
 
-      <div className="grid gap-4 w-full max-w-md mb-8">
+      <div className="grid gap-4 w-full max-w-3xl mb-8">
         {[
           {
             label: "Ideal collaborators",
@@ -622,7 +790,7 @@ const slides = [
   { id: "projects",        label: "Projects",        Component: ProjectsSlide },
   { id: "athletics",       label: "Athletics",       Component: AthleticsSlide },
   { id: "philosophy",      label: "Philosophy",      Component: PhilosophySlide },
-  { id: "recommendations", label: "Codex",           Component: RecommendationsSlide },
+  { id: "recommendations", label: "Recommendations",  Component: RecommendationsSlide },
   { id: "innerwork",       label: "Inner Work",      Component: InnerWorkSlide },
   { id: "vision",          label: "Vision",          Component: VisionSlide },
   { id: "connect",         label: "Connect",         Component: ConnectSlide },
@@ -646,38 +814,62 @@ export default function App() {
   return (
     <div className="h-screen flex flex-col" style={{ background: "#0F1729" }}>
 
-      {/* Navigation — leather codex header */}
-      <nav className="leather-bg flex items-center justify-between px-6 py-4 border-b border-[#704214]/40 flex-shrink-0">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <CompassRose size={28} />
-          <span className="text-[#EDE0CC] font-bold tracking-tight text-lg"
-            style={{ fontFamily: "Playfair Display, serif" }}>Nico</span>
+      {/* Navigation — cartographer's atlas header */}
+      <nav className="leather-bg flex-shrink-0 relative" style={{ borderBottom: "2px solid rgba(112,66,20,0.5)" }}>
+        {/* Decorative top border — double line like old maps */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
+        <div className="absolute top-[3px] left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#D4A843]/15 to-transparent" />
+
+        <div className="flex items-center justify-between px-8 py-4">
+          {/* Logo — clickable to home */}
+          <button
+            onClick={() => go(0)}
+            className="flex items-center gap-3 group"
+            style={{ background: "none", border: "none", cursor: "pointer" }}
+          >
+            <div className="relative">
+              <CompassRose size={40} className="group-hover:opacity-100 opacity-80 transition-opacity" />
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-[#EDE0CC] font-bold tracking-tight text-2xl group-hover:text-[#D4A843] transition-colors"
+                style={{ fontFamily: "Playfair Display, serif" }}>Nico</span>
+              <span className="text-[#704214] text-[9px] tracking-[0.3em] uppercase -mt-0.5"
+                style={{ fontFamily: "Inter, sans-serif" }}>Explorer's Atlas</span>
+            </div>
+          </button>
+
+          {/* Tabs — map chapter markers with Roman numeral feel */}
+          <div className="flex items-center gap-1 overflow-x-auto">
+            {slides.slice(1).map((s, idx) => {
+              const i = idx + 1;
+              const glyphs = ["◈", "△", "◯", "📖", "✦", "⊕", "◎"];
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => go(i)}
+                  className="px-4 py-2.5 text-sm font-medium transition-all flex-shrink-0 relative group rounded-sm"
+                  style={{
+                    fontFamily: "Playfair Display, serif",
+                    color: active === i ? "#EDE0CC" : "#8B7355",
+                    background: active === i ? "rgba(212,168,67,0.12)" : "transparent",
+                    border: active === i ? "1px solid rgba(212,168,67,0.3)" : "1px solid transparent",
+                    cursor: "pointer",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  <span className="text-[10px] mr-1.5 opacity-60">{glyphs[idx]}</span>
+                  <span className="group-hover:text-[#D4A843] transition-colors">{s.label}</span>
+                  {active === i && (
+                    <div className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D4A843] rounded-full" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 overflow-x-auto">
-          {slides.map((s, i) => (
-            <button
-              key={s.id}
-              onClick={() => go(i)}
-              className="px-3 py-1.5 text-xs font-medium transition-all flex-shrink-0 relative"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                color: active === i ? "#D4A843" : "#704214",
-                background: active === i ? "rgba(212,168,67,0.08)" : "transparent",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              {s.label}
-              {active === i && (
-                <div className="absolute bottom-0.5 left-2 right-2 h-px bg-[#D4A843]"
-                  style={{ borderRadius: "40% 60% 50% 50%" }} />
-              )}
-            </button>
-          ))}
-        </div>
+        {/* Decorative bottom border — aged map edge */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/20 to-transparent" />
       </nav>
 
       {/* Slide content */}
@@ -692,46 +884,66 @@ export default function App() {
         </div>
       </div>
 
-      {/* Footer pagination */}
-      <div className="leather-bg flex justify-between items-center px-6 py-3 border-t border-[#704214]/40 flex-shrink-0">
-        <button
-          onClick={() => go(Math.max(active - 1, 0))}
-          disabled={active === 0}
-          className="text-[#704214] hover:text-[#D4A843] disabled:opacity-20 text-xs transition-colors"
-          style={{ fontFamily: "Inter, sans-serif", background: "none", border: "none", cursor: active === 0 ? "default" : "pointer" }}
-        >
-          ← Prev
-        </button>
+      {/* Footer pagination — cartographer's navigation */}
+      <div className="leather-bg flex-shrink-0 relative" style={{ borderTop: "2px solid rgba(112,66,20,0.5)" }}>
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/20 to-transparent" />
 
-        {/* Dot indicators */}
-        <div className="flex gap-2 items-center">
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              className="transition-all"
-              style={{
-                width: active === i ? "16px" : "6px",
-                height: "6px",
-                borderRadius: active === i ? "3px" : "50%",
-                background: active === i ? "#D4A843" : "#704214",
-                opacity: active === i ? 1 : 0.4,
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-              }}
-            />
-          ))}
+        <div className="flex justify-between items-center px-6 py-3">
+          {/* West / Prev */}
+          <button
+            onClick={() => go(Math.max(active - 1, 0))}
+            disabled={active === 0}
+            className="flex items-center gap-2 group disabled:opacity-20 transition-all"
+            style={{ background: "none", border: "none", cursor: active === 0 ? "default" : "pointer" }}
+          >
+            <span className="text-[#D4A843] text-sm group-hover:text-[#EDE0CC] transition-colors"
+              style={{ fontFamily: "Playfair Display, serif" }}>W</span>
+            <span className="text-[#704214] text-xs group-hover:text-[#D4A843] transition-colors"
+              style={{ fontFamily: "Inter, sans-serif" }}>
+              ◂ {active > 0 ? slides[active - 1].label : ""}
+            </span>
+          </button>
+
+          {/* Map waypoints */}
+          <div className="flex gap-1.5 items-center">
+            <span className="text-[#704214]/30 text-[10px] mr-1" style={{ fontFamily: "Inter, sans-serif" }}>
+              {active + 1}/{slides.length}
+            </span>
+            {slides.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => go(i)}
+                className="transition-all group relative"
+                title={s.label}
+                style={{
+                  width: active === i ? "20px" : "8px",
+                  height: "8px",
+                  borderRadius: active === i ? "4px" : "50%",
+                  background: active === i ? "#D4A843" : i < active ? "rgba(212,168,67,0.4)" : "rgba(112,66,20,0.5)",
+                  border: active === i ? "1px solid rgba(212,168,67,0.6)" : "1px solid transparent",
+                  cursor: "pointer",
+                  padding: 0,
+                  boxShadow: active === i ? "0 0 8px rgba(212,168,67,0.3)" : "none",
+                }}
+              />
+            ))}
+          </div>
+
+          {/* East / Next */}
+          <button
+            onClick={() => go(Math.min(active + 1, slides.length - 1))}
+            disabled={active === slides.length - 1}
+            className="flex items-center gap-2 group disabled:opacity-20 transition-all"
+            style={{ background: "none", border: "none", cursor: active === slides.length - 1 ? "default" : "pointer" }}
+          >
+            <span className="text-[#704214] text-xs group-hover:text-[#D4A843] transition-colors"
+              style={{ fontFamily: "Inter, sans-serif" }}>
+              {active < slides.length - 1 ? slides[active + 1].label : ""} ▸
+            </span>
+            <span className="text-[#D4A843] text-sm group-hover:text-[#EDE0CC] transition-colors"
+              style={{ fontFamily: "Playfair Display, serif" }}>E</span>
+          </button>
         </div>
-
-        <button
-          onClick={() => go(Math.min(active + 1, slides.length - 1))}
-          disabled={active === slides.length - 1}
-          className="text-[#704214] hover:text-[#D4A843] disabled:opacity-20 text-xs transition-colors"
-          style={{ fontFamily: "Inter, sans-serif", background: "none", border: "none", cursor: active === slides.length - 1 ? "default" : "pointer" }}
-        >
-          Next →
-        </button>
       </div>
     </div>
   );
