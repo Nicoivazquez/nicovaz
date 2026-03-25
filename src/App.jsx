@@ -261,7 +261,7 @@ function HeroSlide({ next }) {
         </p>
 
         <div className="flex gap-2 flex-wrap justify-center mb-10">
-          {["San Francisco", "Argentine roots", "Building 3 startups", "INFJ"].map(tag => (
+          {["San Francisco", "Born in Miami", "Building 3 startups", "INFJ"].map(tag => (
             <span key={tag}
               className="px-3 py-1 text-[#8B9DAF] text-xs border border-[#704214]/40 rounded-sm"
               style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.08)" }}>
@@ -300,7 +300,7 @@ function HeroSlide({ next }) {
 
 function ProjectsSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>What I'm Building</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Projects</h2>
@@ -387,7 +387,7 @@ function ProjectsSlide() {
 
 function AthleticsSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Physical Terrain</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Movement & Sport</h2>
@@ -430,7 +430,7 @@ function AthleticsSlide() {
 
 function PhilosophySlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Legend</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>What I Live By</h2>
@@ -514,11 +514,12 @@ function RecommendationsSlide() {
       glyph: "⚙",
       items: [
         { name: "Obsidian", note: "Second brain. Local-first markdown, no lock-in." },
-        { name: "MacWhisper", note: "Local audio transcription. Fast, private, runs on-device." },
+        { name: "Quill", note: "Local-first audio transcription (my project). 8 adapters, speaker diarization, AI chat with your transcripts." },
         { name: "VoiceLink", note: "Voice-first communication. Clean and simple." },
-        { name: "Ocean", note: "Personality insights and self-understanding." },
+        { name: "Claude Code", note: "AI pair programming. The best coding agent in the terminal." },
         { name: "OpenClaw", note: "My multi-agent OS. Six agents running the venture portfolio." },
-        { name: "Co-Pilot", note: "AI pair programming. Second pair of hands in the editor." },
+        { name: "Firefox", note: "Because I love Mozilla. Super privacy-focused and open-source." },
+        { name: "Protonmail", note: "Private, encrypted email. No ads, no tracking." },
         { name: "Signal", note: "Encrypted messaging. Privacy by default." },
       ],
     },
@@ -527,22 +528,22 @@ function RecommendationsSlide() {
       glyph: "⛺",
       items: [
         { name: "Shaman Warrior Sandals", note: "Minimalist running sandals. Born to Run philosophy on your feet." },
-        { name: "Garmin Watch", note: "Running, HRV, training load. The data layer for everything physical." },
+        { name: "Cashmere Wool Sweater", note: "Either thrifted or from an environmentally conscious company. Timeless and sustainable." },
+        { name: "Merino Wool Socks & Underwear", note: "Merino wool is natural and long-lasting. The best base layer." },
         { name: "Fuji XS-10 / X100V", note: "Film and digital. The Fuji colors are unmatched for street and travel." },
         { name: "La Sportiva TC Pro", note: "High-performance climbing shoe. Precision on rock." },
-        { name: "Massage Gun", note: "Daily recovery tool. Quick and effective between sessions." },
-        { name: "Spiky Lacrosse Ball", note: "Roll out your feet. Simple, cheap, life-changing for runners." },
+        { name: "Foam Roller, Massage Gun & Spiky Lacrosse Ball", note: "Daily recovery stack. Roll out, percussion, and deep tissue — quick and effective between sessions." },
       ],
     },
     food: {
       label: "Food",
       glyph: "⚗",
       items: [
-        { name: "Nona's Argentine Recipes", note: "Family recipes from my grandmother. The foundation of everything I cook." },
-        { name: "Fries Friday", note: "Weekly tradition — friends over, fries from a different spot each time." },
+        { name: "Canned Fish & Canned Cod Liver", note: "Healthy fats, healthy omegas. Simple, affordable, nutrient-dense." },
+        { name: "Grass-Fed Sirloin Steak", note: "Very lean and tender cut of meat that's affordable for everyday consumption." },
         { name: "Isabelle Page Recipe Book", note: "Vegan cookbook. Clean, creative plant-based cooking." },
         { name: "Fasting Protocols", note: "3-day water fast quarterly. Monthly one-day fasts. Reset the system." },
-        { name: "No Alcohol, No Caffeine", note: "Dropped both. Sleep quality and morning clarity made it permanent." },
+        { name: "No Alcohol, No Caffeine", note: "I don't want to consume poison. And I don't want caffeine to trick me into working on something I don't care about." },
         { name: "Ancestral Sourcing", note: "Grass-fed, pasture-raised, wild-caught. Source matters more than calories." },
       ],
     },
@@ -567,7 +568,7 @@ function RecommendationsSlide() {
   const current = recs[activeTab];
 
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Codex</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Recommendations</h2>
@@ -624,7 +625,7 @@ function RecommendationsSlide() {
 
 function InnerWorkSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Inner Cartography</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Consciousness & Community</h2>
@@ -647,7 +648,7 @@ function InnerWorkSlide() {
           {
             glyph: "◎",
             theme: "Morning Practice",
-            desc: "Grounding barefoot, morning sunlight, breathwork, 8+ hours of sleep. The purpose of my day is to let go of my blockages and grow.",
+            desc: "Starts the night before. Going to bed early to get 8+ hours of sleep. Grounding barefoot, morning sunlight. 1–2 hours of exercise, full body — alternating between strength and cardio days.",
           },
           {
             glyph: "✦",
@@ -681,16 +682,13 @@ function InnerWorkSlide() {
 
 function VisionSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
-      <div className="relative mb-8">
-        <CompassRose size={80} className="opacity-60" />
-        <div className="absolute inset-0 rounded-full breathing-glow"
-          style={{ boxShadow: "0 0 50px rgba(212,168,67,0.15)" }} />
-      </div>
-
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Terra Incognita</CartoucheLabel>
-      <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-4"
+      <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Where I'm Headed</h2>
+      <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
+        The map is still being drawn.
+      </p>
       <AlchemicalDivider />
 
       <p className="text-[#8B9DAF] max-w-3xl mb-8 leading-relaxed"
@@ -739,7 +737,7 @@ function VisionSlide() {
 
 function ConnectSlide() {
   return (
-    <div className="px-8 py-12 min-h-full flex flex-col justify-center items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
@@ -828,11 +826,11 @@ export default function App() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
         <div className="absolute top-[3px] left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#D4A843]/15 to-transparent" />
 
-        <div className="flex items-center justify-between px-8 py-4">
+        <div className="flex items-center px-6 py-4 gap-6">
           {/* Logo — clickable to home */}
           <button
             onClick={() => go(0)}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-3 group flex-shrink-0"
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >
             <div className="relative">
@@ -846,33 +844,99 @@ export default function App() {
             </div>
           </button>
 
-          {/* Tabs — map chapter markers with Roman numeral feel */}
-          <div className="flex items-center gap-1 overflow-x-auto">
-            {slides.slice(1).map((s, idx) => {
-              const i = idx + 1;
-              const glyphs = ["◈", "△", "◯", "📖", "✦", "⊕", "◎"];
-              return (
-                <button
-                  key={s.id}
-                  onClick={() => go(i)}
-                  className="px-4 py-2.5 text-sm font-medium transition-all flex-shrink-0 relative group rounded-sm"
-                  style={{
-                    fontFamily: "Playfair Display, serif",
-                    color: active === i ? "#EDE0CC" : "#8B7355",
-                    background: active === i ? "rgba(212,168,67,0.12)" : "transparent",
-                    border: active === i ? "1px solid rgba(212,168,67,0.3)" : "1px solid transparent",
-                    cursor: "pointer",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  <span className="text-[10px] mr-1.5 opacity-60">{glyphs[idx]}</span>
-                  <span className="group-hover:text-[#D4A843] transition-colors">{s.label}</span>
-                  {active === i && (
-                    <div className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#D4A843] rounded-full" />
-                  )}
-                </button>
-              );
-            })}
+          {/* Route Map Navigation — full-width waypoint trail */}
+          <div className="flex-1 flex items-center justify-center relative">
+            {/* Connecting route line behind buttons */}
+            <div className="absolute top-1/2 left-4 right-4 -translate-y-[2px] pointer-events-none" style={{ zIndex: 0 }}>
+              <div className="h-[2px]" style={{
+                background: "repeating-linear-gradient(to right, rgba(112,66,20,0.5) 0px, rgba(112,66,20,0.5) 8px, transparent 8px, transparent 14px)",
+              }} />
+            </div>
+
+            <div className="flex items-center justify-between w-full relative px-2" style={{ zIndex: 1 }}>
+              {slides.slice(1).map((s, idx) => {
+                const i = idx + 1;
+                const isActive = active === i;
+                const isPast = active > i;
+                const glyphs = ["◈", "△", "◯", "📖", "✦", "⊕", "◎"];
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => go(i)}
+                    className="flex flex-col items-center gap-1.5 px-2 py-1 transition-all relative group"
+                    style={{ background: "none", border: "none", cursor: "pointer" }}
+                  >
+                    {/* Waypoint marker — larger & bolder */}
+                    <div className="relative flex items-center justify-center transition-all"
+                      style={{
+                        width: isActive ? "44px" : "34px",
+                        height: isActive ? "44px" : "34px",
+                      }}>
+                      {/* Outer glow ring for active */}
+                      {isActive && (
+                        <div className="absolute inset-[-8px] rounded-full breathing-glow"
+                          style={{
+                            border: "1.5px solid rgba(212,168,67,0.35)",
+                            boxShadow: "0 0 20px rgba(212,168,67,0.2), 0 0 40px rgba(212,168,67,0.08)",
+                          }} />
+                      )}
+                      {/* Diamond shape for active, circle for others */}
+                      <div
+                        className="flex items-center justify-center transition-all"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          background: isActive
+                            ? "linear-gradient(135deg, rgba(212,168,67,0.3), rgba(193,120,23,0.2))"
+                            : isPast
+                              ? "rgba(212,168,67,0.1)"
+                              : "rgba(44,24,16,0.6)",
+                          border: isActive
+                            ? "2px solid #D4A843"
+                            : isPast
+                              ? "1.5px solid rgba(212,168,67,0.45)"
+                              : "1.5px solid rgba(112,66,20,0.5)",
+                          borderRadius: isActive ? "6px" : "50%",
+                          transform: isActive ? "rotate(45deg)" : "none",
+                          boxShadow: isActive
+                            ? "0 0 20px rgba(212,168,67,0.25), inset 0 0 8px rgba(212,168,67,0.1)"
+                            : isPast
+                              ? "0 0 6px rgba(212,168,67,0.1)"
+                              : "none",
+                        }}
+                      >
+                        <span style={{
+                          transform: isActive ? "rotate(-45deg)" : "none",
+                          fontSize: isActive ? "18px" : "14px",
+                          opacity: isActive ? 1 : isPast ? 0.75 : 0.5,
+                          lineHeight: 1,
+                        }}>
+                          {glyphs[idx]}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Label — bigger text */}
+                    <span
+                      className="transition-all whitespace-nowrap"
+                      style={{
+                        fontFamily: "Playfair Display, serif",
+                        fontSize: isActive ? "13px" : "11.5px",
+                        fontWeight: isActive ? "700" : "500",
+                        color: isActive ? "#D4A843" : isPast ? "#9B8A6A" : "#704214",
+                        letterSpacing: "0.03em",
+                      }}
+                    >
+                      {s.label}
+                    </span>
+                    {/* Active underline tick */}
+                    {isActive && (
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-6 h-[3px] rounded-full"
+                        style={{ background: "linear-gradient(to right, transparent, #D4A843, transparent)" }} />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
