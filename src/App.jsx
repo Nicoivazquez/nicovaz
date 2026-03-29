@@ -901,7 +901,7 @@ export default function App() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
         <div className="absolute top-[3px] left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#D4A843]/15 to-transparent" />
 
-        <div className="flex items-center px-6 py-4 gap-6">
+        <div className="flex items-center px-4 py-4 gap-3">
           {/* Logo — clickable to home */}
           <button
             onClick={() => go(0)}
@@ -944,8 +944,8 @@ export default function App() {
                     {/* Waypoint marker — larger & bolder */}
                     <div className="relative flex items-center justify-center transition-all"
                       style={{
-                        width: isActive ? "38px" : "30px",
-                        height: isActive ? "38px" : "30px",
+                        width: isActive ? "44px" : "34px",
+                        height: isActive ? "44px" : "34px",
                       }}>
                       {/* Outer glow ring for active */}
                       {isActive && (
@@ -982,7 +982,7 @@ export default function App() {
                       >
                         <span style={{
                           transform: isActive ? "rotate(-45deg)" : "none",
-                          fontSize: isActive ? "16px" : "12px",
+                          fontSize: isActive ? "18px" : "14px",
                           opacity: isActive ? 1 : isPast ? 0.75 : 0.5,
                           lineHeight: 1,
                         }}>
@@ -995,7 +995,7 @@ export default function App() {
                       className="transition-all whitespace-nowrap"
                       style={{
                         fontFamily: "Playfair Display, serif",
-                        fontSize: isActive ? "12px" : "10.5px",
+                        fontSize: isActive ? "13px" : "12px",
                         fontWeight: isActive ? "700" : "500",
                         color: isActive ? "#D4A843" : isPast ? "#9B8A6A" : "#704214",
                         letterSpacing: "0.03em",
