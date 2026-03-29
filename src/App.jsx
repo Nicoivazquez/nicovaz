@@ -385,6 +385,80 @@ function ProjectsSlide() {
   );
 }
 
+function WritingSlide() {
+  const posts = [
+    {
+      title: "Getting Things Done for Your Inner World",
+      date: "Dec 6, 2025",
+      desc: "Limitless AI recorder wearable just got acquired by Meta. The next wave of data capture is incoming.",
+      url: "https://0to1billion.substack.com/p/getting-things-done-for-your-inner",
+    },
+    {
+      title: "Your Mind is Stuck in a Loop (And You Don't Even Know It)",
+      date: "Dec 4, 2025",
+      desc: "You finished that workout.",
+      url: "https://0to1billion.substack.com/p/your-mind-is-stuck-in-a-loop-and",
+    },
+    {
+      title: "The First Question",
+      date: "Nov 22, 2025",
+      desc: "How we thought about what Ducky asks first.",
+      url: "https://0to1billion.substack.com/p/the-first-question",
+    },
+    {
+      title: "The Execution Gap That's Killing Your Goals",
+      date: "Nov 9, 2025",
+      desc: "Why you've consumed 1,000 hours of self-help content but haven't changed.",
+      url: "https://0to1billion.substack.com/p/the-execution-gap-thats-killing-your",
+    },
+  ];
+
+  return (
+    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+      <CartoucheLabel>Letters</CartoucheLabel>
+      <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
+        style={{ fontFamily: "Playfair Display, serif" }}>Writing</h2>
+      <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
+        Personal development and random patterns I see in the world.
+      </p>
+      <AlchemicalDivider />
+      <div className="flex flex-col gap-4 w-full">
+        {posts.map((post, i) => (
+          <a
+            key={post.url}
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card-alchemist flex gap-4 p-5 rounded-sm text-left group"
+            style={{ background: "rgba(44,24,16,0.3)", textDecoration: "none" }}
+          >
+            <span className="text-[#704214]/50 text-xs mt-1.5 flex-shrink-0 w-4 text-right"
+              style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
+            <div className="flex-1">
+              <p className="text-[#EDE0CC] font-semibold text-sm group-hover:text-[#D4A843] transition-colors"
+                style={{ fontFamily: "Playfair Display, serif" }}>
+                {post.title} <span className="text-[10px] opacity-50">↗</span>
+              </p>
+              <p className="text-[#8B9DAF] text-xs mt-1.5 leading-relaxed"
+                style={{ fontFamily: "Lora, serif" }}>{post.desc}</p>
+              <span className="text-[#704214] text-[10px] mt-2 inline-block"
+                style={{ fontFamily: "Inter, sans-serif" }}>{post.date}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div className="mt-8">
+        <a href="https://0to1billion.substack.com"
+          target="_blank" rel="noopener noreferrer"
+          className="wax-seal px-6 py-2.5 rounded-sm text-sm tracking-wide inline-flex items-center gap-2"
+          style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
+          Subscribe on Substack →
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function AthleticsSlide() {
   return (
     <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
@@ -794,6 +868,7 @@ function ConnectSlide() {
 const slides = [
   { id: "hero",            label: "Home",            Component: HeroSlide },
   { id: "projects",        label: "Projects",        Component: ProjectsSlide },
+  { id: "writing",         label: "Writing",         Component: WritingSlide },
   { id: "athletics",       label: "Athletics",       Component: AthleticsSlide },
   { id: "philosophy",      label: "Philosophy",      Component: PhilosophySlide },
   { id: "recommendations", label: "Recommendations",  Component: RecommendationsSlide },
@@ -858,19 +933,19 @@ export default function App() {
                 const i = idx + 1;
                 const isActive = active === i;
                 const isPast = active > i;
-                const glyphs = ["◈", "△", "◯", "📖", "✦", "⊕", "◎"];
+                const glyphs = ["◈", "✎", "△", "◯", "📖", "✦", "⊕", "◎"];
                 return (
                   <button
                     key={s.id}
                     onClick={() => go(i)}
-                    className="flex flex-col items-center gap-1.5 px-2 py-1 transition-all relative group"
+                    className="flex flex-col items-center gap-1 px-1 py-1 transition-all relative group"
                     style={{ background: "none", border: "none", cursor: "pointer" }}
                   >
                     {/* Waypoint marker — larger & bolder */}
                     <div className="relative flex items-center justify-center transition-all"
                       style={{
-                        width: isActive ? "44px" : "34px",
-                        height: isActive ? "44px" : "34px",
+                        width: isActive ? "38px" : "30px",
+                        height: isActive ? "38px" : "30px",
                       }}>
                       {/* Outer glow ring for active */}
                       {isActive && (
@@ -907,7 +982,7 @@ export default function App() {
                       >
                         <span style={{
                           transform: isActive ? "rotate(-45deg)" : "none",
-                          fontSize: isActive ? "18px" : "14px",
+                          fontSize: isActive ? "16px" : "12px",
                           opacity: isActive ? 1 : isPast ? 0.75 : 0.5,
                           lineHeight: 1,
                         }}>
@@ -920,7 +995,7 @@ export default function App() {
                       className="transition-all whitespace-nowrap"
                       style={{
                         fontFamily: "Playfair Display, serif",
-                        fontSize: isActive ? "13px" : "11.5px",
+                        fontSize: isActive ? "12px" : "10.5px",
                         fontWeight: isActive ? "700" : "500",
                         color: isActive ? "#D4A843" : isPast ? "#9B8A6A" : "#704214",
                         letterSpacing: "0.03em",
