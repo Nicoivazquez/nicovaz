@@ -581,6 +581,8 @@ function RecommendationsSlide() {
         { name: "The Yoga of Eating", author: "Charles Eisenstein", note: "Threw out every diet rule and replaced them with one: listen to your body." },
         { name: "This Changes Everything", author: "Naomi Klein", note: "Climate isn't a sidebar issue — it's the issue that exposes everything broken about the system." },
         { name: "Why We Sleep", author: "Matthew Walker", note: "Destroyed every excuse I had for sleeping less. The data is brutal and undeniable." },
+        { name: "Unbound: A Woman's Guide to Power", author: "Kasia Urbaniak", note: "A book I recommend to a lot of my female friends. I got my favorite emotional work exercise from it — the Bad Girl Exercise." },
+        { name: "The 5 Personality Patterns", author: "Steven Kessler", note: "Maps the five survival strategies we all develop. Once you see them, you can't unsee them in yourself or anyone else." },
       ],
     },
     tools: {
