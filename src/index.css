@@ -199,3 +199,36 @@ body {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--sepia), transparent);
 }
+
+/* Mobile nav scroll strip — hide scrollbar but keep scrolling */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Aurora drifting blobs for AuroraBackdrop */
+@keyframes drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(12vw, 8vh, 0) scale(1.15); }
+}
+@keyframes drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-10vw, -6vh, 0) scale(1.2); }
+}
+
+/* Respect reduced motion — kill infinite animations that distract */
+@media (prefers-reduced-motion: reduce) {
+  .breathing-glow,
+  *[style*="drift-a"],
+  *[style*="drift-b"],
+  *[style*="compass-spin"],
+  *[style*="float-mote"],
+  *[style*="breathe"] {
+    animation: none !important;
+  }
+  html { scroll-behavior: auto; }
+}
