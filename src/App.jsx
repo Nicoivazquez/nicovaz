@@ -86,8 +86,10 @@ function GoldenMotes() {
 function SpotlightCard({
   children,
   className = "",
-  spotlight = "rgba(212,168,67,0.18)",
+  spotlight = "rgba(212,168,67,0.22)",
   style = {},
+  as: As = "div",
+  ...rest
 }) {
   const ref = useRef(null);
 
@@ -105,12 +107,13 @@ function SpotlightCard({
   };
 
   return (
-    <div
+    <As
       ref={ref}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       className={`card-alchemist relative overflow-hidden ${className}`}
       style={{ ...style, "--spot-o": 0 }}
+      {...rest}
     >
       <div
         aria-hidden
@@ -121,7 +124,7 @@ function SpotlightCard({
         }}
       />
       <div className="relative z-[1]">{children}</div>
-    </div>
+    </As>
   );
 }
 
@@ -177,6 +180,93 @@ function AuroraBackdrop() {
           background: "radial-gradient(circle, #4A8B7F 0%, transparent 70%)",
           animation: "drift-b 28s ease-in-out infinite alternate",
         }} />
+    </div>
+  );
+}
+
+// ── Shader backdrop (animated mesh gradient) ─────────────────────────────────
+// Inspired by 21st.dev/shadway/background-shaders, expressed as a CSS mesh —
+// four softly animated color fields with grain overlay. Dark, cinematic.
+
+function ShaderBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Base color field */}
+      <div className="absolute inset-0" style={{
+        background:
+          "radial-gradient(ellipse at 20% 30%, rgba(42,27,74,0.55) 0%, transparent 55%)," +
+          "radial-gradient(ellipse at 80% 70%, rgba(15,58,63,0.55) 0%, transparent 55%)," +
+          "radial-gradient(ellipse at 50% 90%, rgba(58,36,24,0.50) 0%, transparent 60%)",
+      }} />
+      {/* Animated highlight blobs (screen-blended) */}
+      <div className="absolute rounded-full blur-3xl"
+        style={{
+          width: "70vw", height: "70vw", top: "5%", left: "-25%",
+          background: "radial-gradient(circle, rgba(212,168,67,0.22) 0%, transparent 70%)",
+          animation: "shader-a 18s ease-in-out infinite alternate",
+          mixBlendMode: "screen",
+        }} />
+      <div className="absolute rounded-full blur-3xl"
+        style={{
+          width: "55vw", height: "55vw", top: "-15%", right: "-20%",
+          background: "radial-gradient(circle, rgba(107,63,160,0.26) 0%, transparent 70%)",
+          animation: "shader-b 24s ease-in-out infinite alternate",
+          mixBlendMode: "screen",
+        }} />
+      <div className="absolute rounded-full blur-3xl"
+        style={{
+          width: "60vw", height: "60vw", bottom: "-25%", left: "25%",
+          background: "radial-gradient(circle, rgba(74,139,127,0.22) 0%, transparent 70%)",
+          animation: "shader-c 22s ease-in-out infinite alternate",
+          mixBlendMode: "screen",
+        }} />
+      {/* Fine grain */}
+      <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay" style={{
+        backgroundImage:
+          "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.66 0 0 0 0 0.26 0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+      }} />
+    </div>
+  );
+}
+
+// ── Interactive gradient (mouse-tracked, no drifting blobs) ──────────────────
+// Inspired by 21st.dev/rahil1202/interactive-gradient-background, stripped down
+// to the pure mouse-follow behavior: two opposing gradients breathe with the cursor.
+
+function InteractiveGradient({ tint = "rgba(212,168,67,0.12)" }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof window === "undefined") return;
+    let mx = 50, my = 40, tx = 50, ty = 40, rafId;
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width) * 100;
+      ty = ((e.clientY - r.top) / r.height) * 100;
+    };
+    const loop = () => {
+      mx += (tx - mx) * 0.06;
+      my += (ty - my) * 0.06;
+      el.style.setProperty("--gx", `${mx}%`);
+      el.style.setProperty("--gy", `${my}%`);
+      rafId = requestAnimationFrame(loop);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    rafId = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("mousemove", onMove);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0" style={{
+        background:
+          `radial-gradient(700px circle at var(--gx, 50%) var(--gy, 40%), ${tint}, transparent 60%),` +
+          "radial-gradient(1000px circle at calc(100% - var(--gx, 50%)) calc(100% - var(--gy, 40%)), rgba(107,63,160,0.10), transparent 65%)",
+      }} />
     </div>
   );
 }
@@ -533,27 +623,30 @@ function WritingSlide() {
       <AlchemicalDivider />
       <div className="flex flex-col gap-4 w-full">
         {posts.map((post, i) => (
-          <a
+          <SpotlightCard
             key={post.url}
+            as="a"
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="card-alchemist flex gap-4 p-5 rounded-sm text-left group"
+            className="rounded-sm text-left group"
             style={{ background: "rgba(44,24,16,0.3)", textDecoration: "none" }}
           >
-            <span className="text-[#704214]/50 text-xs mt-1.5 flex-shrink-0 w-4 text-right"
-              style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
-            <div className="flex-1">
-              <p className="text-[#EDE0CC] font-semibold text-sm group-hover:text-[#D4A843] transition-colors"
-                style={{ fontFamily: "Playfair Display, serif" }}>
-                {post.title} <span className="text-[10px] opacity-50">↗</span>
-              </p>
-              <p className="text-[#8B9DAF] text-xs mt-1.5 leading-relaxed"
-                style={{ fontFamily: "Lora, serif" }}>{post.desc}</p>
-              <span className="text-[#704214] text-[10px] mt-2 inline-block"
-                style={{ fontFamily: "Inter, sans-serif" }}>{post.date}</span>
+            <div className="flex gap-4 p-5">
+              <span className="text-[#704214]/50 text-xs mt-1.5 flex-shrink-0 w-4 text-right"
+                style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
+              <div className="flex-1">
+                <p className="text-[#EDE0CC] font-semibold text-sm group-hover:text-[#D4A843] transition-colors"
+                  style={{ fontFamily: "Playfair Display, serif" }}>
+                  {post.title} <span className="text-[10px] opacity-50">↗</span>
+                </p>
+                <p className="text-[#8B9DAF] text-xs mt-1.5 leading-relaxed"
+                  style={{ fontFamily: "Lora, serif" }}>{post.desc}</p>
+                <span className="text-[#704214] text-[10px] mt-2 inline-block"
+                  style={{ fontFamily: "Inter, sans-serif" }}>{post.date}</span>
+              </div>
             </div>
-          </a>
+          </SpotlightCard>
         ))}
       </div>
       <div className="mt-8">
@@ -587,26 +680,35 @@ function AthleticsSlide() {
           { symbol: "≋", name: "Swimming", detail: "Open water & laps" },
           { symbol: "⊕", name: "Cycling", detail: "Endurance cross-training" },
         ].map(a => (
-          <div key={a.name} className="card-alchemist p-5 rounded-sm flex items-center gap-4 text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-xl w-7 text-center flex-shrink-0">{a.symbol}</span>
-            <div>
-              <p className="text-[#EDE0CC] font-medium text-sm"
-                style={{ fontFamily: "Playfair Display, serif" }}>{a.name}</p>
-              <p className="text-[#704214] text-xs mt-0.5"
-                style={{ fontFamily: "Inter, sans-serif" }}>{a.detail}</p>
+          <SpotlightCard
+            key={a.name}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="p-5 flex items-center gap-4">
+              <span className="text-[#D4A843] text-xl w-7 text-center flex-shrink-0">{a.symbol}</span>
+              <div>
+                <p className="text-[#EDE0CC] font-medium text-sm"
+                  style={{ fontFamily: "Playfair Display, serif" }}>{a.name}</p>
+                <p className="text-[#704214] text-xs mt-0.5"
+                  style={{ fontFamily: "Inter, sans-serif" }}>{a.detail}</p>
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
-      <div className="card-alchemist p-5 rounded-sm w-full text-left"
-        style={{ background: "rgba(44,24,16,0.2)" }}>
-        <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
-          style={{ fontFamily: "Lora, serif" }}>
-          "If you get tired, learn to rest, not to quit. Come back from every setback stronger —
-          Achilles tendinitis, broken ankle, IT band. The body is the instrument."
-        </p>
-      </div>
+      <SpotlightCard
+        className="rounded-sm w-full text-left"
+        style={{ background: "rgba(44,24,16,0.2)" }}
+      >
+        <div className="p-5">
+          <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
+            style={{ fontFamily: "Lora, serif" }}>
+            "If you get tired, learn to rest, not to quit. Come back from every setback stronger —
+            Achilles tendinitis, broken ankle, IT band. The body is the instrument."
+          </p>
+        </div>
+      </SpotlightCard>
     </div>
   );
 }
@@ -649,16 +751,21 @@ function PhilosophySlide() {
             desc: "Not what you say you'll do. Data-driven in business, intuition-driven in life. Curiosity will conquer fear more than bravery ever will.",
           },
         ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
-            <div>
-              <p className="text-[#EDE0CC] font-semibold text-base"
-                style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
-              <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
-                style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
+          <SpotlightCard
+            key={f.theme}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="flex gap-4 p-5">
+              <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
+              <div>
+                <p className="text-[#EDE0CC] font-semibold text-base"
+                  style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
+                <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
+                  style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
     </div>
@@ -785,23 +892,28 @@ function RecommendationsSlide() {
       {/* Items */}
       <div className="flex flex-col gap-3 w-full">
         {current.items.map((item, i) => (
-          <div key={item.name} className="card-alchemist flex gap-4 p-4 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#704214]/50 text-xs mt-1 flex-shrink-0 w-4 text-right"
-              style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
-            <div>
-              <p className="text-[#EDE0CC] font-semibold text-sm"
-                style={{ fontFamily: "Playfair Display, serif" }}>
-                {item.name}
-                {item.author && (
-                  <span className="text-[#704214] font-normal text-xs ml-2"
-                    style={{ fontFamily: "Inter, sans-serif" }}>— {item.author}</span>
-                )}
-              </p>
-              <p className="text-[#8B9DAF] text-xs mt-1 leading-relaxed"
-                style={{ fontFamily: "Lora, serif" }}>{item.note}</p>
+          <SpotlightCard
+            key={item.name}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="flex gap-4 p-4">
+              <span className="text-[#704214]/50 text-xs mt-1 flex-shrink-0 w-4 text-right"
+                style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
+              <div>
+                <p className="text-[#EDE0CC] font-semibold text-sm"
+                  style={{ fontFamily: "Playfair Display, serif" }}>
+                  {item.name}
+                  {item.author && (
+                    <span className="text-[#704214] font-normal text-xs ml-2"
+                      style={{ fontFamily: "Inter, sans-serif" }}>— {item.author}</span>
+                  )}
+                </p>
+                <p className="text-[#8B9DAF] text-xs mt-1 leading-relaxed"
+                  style={{ fontFamily: "Lora, serif" }}>{item.note}</p>
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
     </div>
@@ -841,33 +953,44 @@ function InnerWorkSlide() {
             desc: "Men's group, intentional gatherings, Burning Man. The best game in life is making the most amount of friends possible.",
           },
         ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
-            <div>
-              <p className="text-[#EDE0CC] font-semibold text-base"
-                style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
-              <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
-                style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
+          <SpotlightCard
+            key={f.theme}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="flex gap-4 p-5">
+              <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
+              <div>
+                <p className="text-[#EDE0CC] font-semibold text-base"
+                  style={{ fontFamily: "Playfair Display, serif" }}>{f.theme}</p>
+                <p className="text-[#8B9DAF] text-sm leading-relaxed mt-1"
+                  style={{ fontFamily: "Lora, serif" }}>{f.desc}</p>
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
-      <div className="card-alchemist p-5 rounded-sm mt-5 w-full text-left"
-        style={{ background: "rgba(44,24,16,0.2)" }}>
-        <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
-          style={{ fontFamily: "Lora, serif" }}>
-          "Yesterday I was clever, so I wanted to change the world.
-          Today I am wise, so I am changing myself." — Rumi
-        </p>
-      </div>
+      <SpotlightCard
+        className="rounded-sm mt-5 w-full text-left"
+        style={{ background: "rgba(44,24,16,0.2)" }}
+      >
+        <div className="p-5">
+          <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
+            style={{ fontFamily: "Lora, serif" }}>
+            "Yesterday I was clever, so I wanted to change the world.
+            Today I am wise, so I am changing myself." — Rumi
+          </p>
+        </div>
+      </SpotlightCard>
     </div>
   );
 }
 
 function VisionSlide() {
   return (
-    <div className="relative px-5 md:px-8 py-10 md:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="relative min-h-full w-full overflow-hidden">
+      <InteractiveGradient />
+      <div className="relative px-5 md:px-8 py-10 md:py-16 flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Terra Incognita</CartoucheLabel>
       <h2 className="text-2xl md:text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Where I'm Headed</h2>
@@ -900,29 +1023,37 @@ function VisionSlide() {
             desc: "A place to live, a community, a home. A high-end retreat center and intentional village in the Patagonian landscape.",
           },
         ].map(p => (
-          <div key={p.label} className="card-alchemist p-5 rounded-sm flex gap-4 items-start text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <span className="text-[#D4A843] text-2xl flex-shrink-0 mt-0.5">{p.glyph}</span>
-            <div>
-              <p className="text-[#EDE0CC] font-semibold text-sm mb-1"
-                style={{ fontFamily: "Playfair Display, serif" }}>{p.label}</p>
-              <p className="text-[#8B9DAF] text-xs leading-relaxed"
-                style={{ fontFamily: "Lora, serif" }}>{p.desc}</p>
+          <SpotlightCard
+            key={p.label}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="p-5 flex gap-4 items-start">
+              <span className="text-[#D4A843] text-2xl flex-shrink-0 mt-0.5">{p.glyph}</span>
+              <div>
+                <p className="text-[#EDE0CC] font-semibold text-sm mb-1"
+                  style={{ fontFamily: "Playfair Display, serif" }}>{p.label}</p>
+                <p className="text-[#8B9DAF] text-xs leading-relaxed"
+                  style={{ fontFamily: "Lora, serif" }}>{p.desc}</p>
+              </div>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
 
       <p className="text-[#C17817] text-sm italic" style={{ fontFamily: "Playfair Display, serif" }}>
         "Building the map before drawing the territory."
       </p>
+      </div>
     </div>
   );
 }
 
 function ConnectSlide() {
   return (
-    <div className="px-5 md:px-8 py-10 md:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="relative min-h-full w-full overflow-hidden">
+      <ShaderBackdrop />
+      <div className="relative px-5 md:px-8 py-10 md:py-16 flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-2xl md:text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
@@ -948,18 +1079,23 @@ function ConnectSlide() {
             items: ["Consciousness research & psychedelic science", "Longevity & biohacking", "Intentional communities"],
           },
         ].map(s => (
-          <div key={s.label} className="card-alchemist p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[#D4A843] text-xs">{s.glyph}</span>
-              <p className="text-[#D4A843] text-xs font-semibold uppercase tracking-widest"
-                style={{ fontFamily: "Inter, sans-serif" }}>{s.label}</p>
+          <SpotlightCard
+            key={s.label}
+            className="rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)" }}
+          >
+            <div className="p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-[#D4A843] text-xs">{s.glyph}</span>
+                <p className="text-[#D4A843] text-xs font-semibold uppercase tracking-widest"
+                  style={{ fontFamily: "Inter, sans-serif" }}>{s.label}</p>
+              </div>
+              {s.items.map(i => (
+                <p key={i} className="text-[#8B9DAF] text-sm py-0.5"
+                  style={{ fontFamily: "Lora, serif" }}>· {i}</p>
+              ))}
             </div>
-            {s.items.map(i => (
-              <p key={i} className="text-[#8B9DAF] text-sm py-0.5"
-                style={{ fontFamily: "Lora, serif" }}>· {i}</p>
-            ))}
-          </div>
+          </SpotlightCard>
         ))}
       </div>
 
@@ -969,6 +1105,7 @@ function ConnectSlide() {
           style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
           Instagram →
         </a>
+      </div>
       </div>
     </div>
   );
