@@ -52,14 +52,17 @@ function CartoucheLabel({ children, className = "" }) {
   );
 }
 
+// Generated once per page load — keeps render pure and motes stable across re-renders
+const MOTES = Array.from({ length: 12 }, (_, i) => ({
+  id: i,
+  left: `${10 + Math.random() * 80}%`,
+  delay: `${Math.random() * 6}s`,
+  duration: `${5 + Math.random() * 6}s`,
+  size: `${2 + Math.random() * 3}px`,
+}));
+
 function GoldenMotes() {
-  const motes = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    left: `${10 + Math.random() * 80}%`,
-    delay: `${Math.random() * 6}s`,
-    duration: `${5 + Math.random() * 6}s`,
-    size: `${2 + Math.random() * 3}px`,
-  }));
+  const motes = MOTES;
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {motes.map(m => (
@@ -84,15 +87,16 @@ function GoldenMotes() {
 
 function TravelMap() {
   const stops = [
-    { city: "Bali", months: "Jan – Mar", x: 810, y: 275, lx: 0, ly: 30, anchor: "middle", current: true },
-    { city: "Madrid", months: "Apr – May", x: 490, y: 120, lx: -15, ly: -18, anchor: "end" },
-    { city: "???", months: "Jun", x: 570, y: 140, lx: 18, ly: 5, anchor: "start", undecided: true },
-    { city: "Portugal", months: "Jul – Aug", x: 450, y: 155, lx: -18, ly: 18, anchor: "end" },
-    { city: "USA", months: "Sep – Oct", x: 185, y: 130, lx: 0, ly: -18, anchor: "middle" },
-    { city: "Argentina", months: "Nov →", x: 330, y: 370, lx: 0, ly: 30, anchor: "middle" },
+    { city: "Bali", months: "Jan – Mar", x: 810, y: 275, lx: 0, ly: 30, anchor: "middle" },
+    { city: "Madrid", months: "Apr – Jun", x: 490, y: 120, lx: -15, ly: -18, anchor: "end" },
+    { city: "Indiana", months: "Jun – Oct · you are here", x: 228, y: 112, lx: 0, ly: -34, anchor: "middle", current: true },
+    { city: "Argentina", months: "Oct → ?", x: 330, y: 370, lx: 0, ly: 30, anchor: "middle", undecided: true },
   ];
 
-  const routePath = "M 810 275 Q 650 140 490 120 Q 530 108 570 140 Q 510 125 450 155 Q 320 55 185 130 Q 220 250 330 370";
+  // Traveled route: Bali → Madrid → Indiana
+  const routePath = "M 810 275 Q 650 140 490 120 Q 360 40 228 112";
+  // Potential next leg: Indiana → Argentina (October, undecided)
+  const potentialPath = "M 228 112 Q 235 255 330 370";
 
   return (
     <div className="max-w-6xl mx-auto w-full">
@@ -105,7 +109,11 @@ function TravelMap() {
 
       <div className="relative rounded-sm overflow-hidden border border-[#704214]/30"
         style={{ background: "rgba(44,24,16,0.2)" }}>
-        <svg viewBox="0 0 1000 450" className="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+        {/* On small screens the chart pans like a real map; on md+ it fits the frame */}
+        <div className="overflow-x-auto md:overflow-x-visible scrollbar-hide focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D4A843]"
+          data-hscroll tabIndex={0} role="region" aria-label="Travel map — scrolls horizontally">
+        <svg viewBox="0 0 1000 450" preserveAspectRatio="xMidYMid meet"
+          className="h-auto w-[760px] max-w-none md:w-full md:max-w-full">
           {/* Meridian & parallel grid */}
           {Array.from({ length: 11 }, (_, i) => (
             <line key={`v${i}`} x1={i * 100} y1="0" x2={i * 100} y2="450"
@@ -144,27 +152,40 @@ function TravelMap() {
           <text x="660" y="350" textAnchor="middle" fill="#704214" fontSize="10" opacity="0.12"
             fontFamily="Playfair Display, serif" fontStyle="italic" letterSpacing="6">INDIAN OCEAN</text>
 
-          {/* Route glow */}
+          {/* Traveled route glow */}
           <path d={routePath} fill="none" stroke="#D4A843" strokeWidth="4" opacity="0.06" />
-          {/* Route dashed line */}
+          {/* Traveled route dashed line */}
           <path d={routePath} fill="none" stroke="#D4A843" strokeWidth="1.5"
             strokeDasharray="8 4" opacity="0.5" />
+          {/* Potential next leg — fainter, looser dashes */}
+          <path d={potentialPath} fill="none" stroke="#D4A843" strokeWidth="1.5"
+            strokeDasharray="3 7" opacity="0.3" />
 
           {/* Stop markers and labels */}
-          {stops.map((s, i) => (
+          {stops.map((s) => (
             <g key={s.city}>
-              <circle cx={s.x} cy={s.y} r="8" fill="none" stroke="#D4A843"
-                strokeWidth="1" opacity={s.current ? "0.7" : "0.3"} />
-              <circle cx={s.x} cy={s.y} r="4"
-                fill={s.undecided ? "none" : "#D4A843"}
-                stroke={s.undecided ? "#D4A843" : "none"}
-                strokeWidth={s.undecided ? "1" : "0"}
-                strokeDasharray={s.undecided ? "2 2" : "none"}
-                opacity={s.current ? "1" : "0.6"} />
-              {s.current && (
-                <circle cx={s.x} cy={s.y} r="14" fill="none" stroke="#D4A843"
-                  strokeWidth="1" opacity="0.4"
-                  style={{ animation: "breathe 3s infinite" }} />
+              {s.current ? (
+                <>
+                  {/* X marks the spot */}
+                  <path
+                    d={`M ${s.x - 8} ${s.y - 8} L ${s.x + 8} ${s.y + 8} M ${s.x - 8} ${s.y + 8} L ${s.x + 8} ${s.y - 8}`}
+                    stroke="#D4A843" strokeWidth="3.5" strokeLinecap="round"
+                    style={{ animation: "x-pulse 3s ease-in-out infinite" }} />
+                  <circle cx={s.x} cy={s.y} r="15" fill="none" stroke="#D4A843"
+                    strokeWidth="1" opacity="0.4"
+                    style={{ animation: "breathe 3s infinite" }} />
+                </>
+              ) : (
+                <>
+                  <circle cx={s.x} cy={s.y} r="8" fill="none" stroke="#D4A843"
+                    strokeWidth="1" opacity="0.3" />
+                  <circle cx={s.x} cy={s.y} r="4"
+                    fill={s.undecided ? "none" : "#D4A843"}
+                    stroke={s.undecided ? "#D4A843" : "none"}
+                    strokeWidth={s.undecided ? "1" : "0"}
+                    strokeDasharray={s.undecided ? "2 2" : "none"}
+                    opacity="0.6" />
+                </>
               )}
               <text x={s.x + s.lx} y={s.y + s.ly}
                 textAnchor={s.anchor} fill={s.undecided ? "#8B9DAF" : "#EDE0CC"}
@@ -192,24 +213,31 @@ function TravelMap() {
               fontFamily="Playfair Display, serif" fontWeight="700">N</text>
           </g>
         </svg>
+        </div>
+
+        {/* Pan hint — mobile only */}
+        <p className="md:hidden text-center text-[#8B9DAF] text-[10px] tracking-widest uppercase pb-1"
+          style={{ fontFamily: "Inter, sans-serif" }}>
+          ← drag to explore the map →
+        </p>
 
         {/* Legend */}
-        <div className="flex justify-center gap-6 py-3 border-t border-[#704214]/20">
+        <div className="flex justify-center flex-wrap gap-x-6 gap-y-1 py-3 border-t border-[#704214]/20">
           <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
             style={{ fontFamily: "Inter, sans-serif" }}>
-            <span className="w-2 h-2 rounded-full bg-[#D4A843] inline-block"
-              style={{ animation: "breathe 3s infinite" }} />
-            Now
+            <span className="text-[#D4A843] text-sm leading-none font-bold"
+              style={{ animation: "breathe 3s infinite" }}>✕</span>
+            You are here
           </span>
           <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
             style={{ fontFamily: "Inter, sans-serif" }}>
             <span className="w-2 h-2 rounded-full bg-[#D4A843] opacity-60 inline-block" />
-            Planned
+            Traveled
           </span>
           <span className="flex items-center gap-2 text-[#8B9DAF] text-xs"
             style={{ fontFamily: "Inter, sans-serif" }}>
             <span className="w-2 h-2 rounded-full border border-dashed border-[#D4A843] inline-block" />
-            Undecided
+            Potential
           </span>
         </div>
       </div>
@@ -229,7 +257,7 @@ function HeroSlide({ next }) {
       <GoldenMotes />
 
       {/* Hero content — centered in viewport */}
-      <div className="flex flex-col items-center justify-center min-h-full text-center px-8 relative">
+      <div className="flex flex-col items-center justify-center min-h-full text-center px-5 sm:px-8 relative">
         {/* Rotating compass */}
         <div className="mb-8 relative">
           <div style={{ animation: "compass-spin 60s linear infinite" }}>
@@ -255,13 +283,17 @@ function HeroSlide({ next }) {
 
         <p className="text-[#8B9DAF] max-w-xl text-base leading-relaxed mb-8"
           style={{ fontFamily: "Lora, serif" }}>
-          Ex-FAANG engineer turned multi-venture founder. I build at the intersection of technology,
-          consciousness, and human performance — and spend the rest of my time venturing,
+          Ex-FAANG engineer turned founder. Co-founder of{" "}
+          <a href="https://supervious.ai" target="_blank" rel="noopener noreferrer"
+            className="text-[#D4A843] hover:text-[#EDE0CC] transition-colors"
+            style={{ textDecoration: "none" }}>Supervious</a>
+          {" "}— my main gig — building AI for life insurance. The rest of the time I'm at the
+          intersection of technology, consciousness, and human performance: venturing,
           doing extreme sports, pouring tea, or going inward.
         </p>
 
         <div className="flex gap-2 flex-wrap justify-center mb-10">
-          {["San Francisco", "Born in Miami", "Building 3 startups", "INFJ"].map(tag => (
+          {["Indiana — for now", "Born in Miami", "Co-founder @ Supervious", "INFJ"].map(tag => (
             <span key={tag}
               className="px-3 py-1 text-[#8B9DAF] text-xs border border-[#704214]/40 rounded-sm"
               style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.08)" }}>
@@ -270,13 +302,13 @@ function HeroSlide({ next }) {
           ))}
         </div>
 
-        <div className="flex gap-3 items-center">
+        <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full sm:w-auto max-w-xs sm:max-w-none">
           <button onClick={next} className="wax-seal px-8 py-3 rounded-sm text-sm tracking-wide"
             style={{ fontFamily: "Inter, sans-serif" }}>
             Chart the Territory →
           </button>
           <a href="https://instagram.com/whereintheworldisnico" target="_blank" rel="noopener noreferrer"
-            className="px-5 py-3 rounded-sm text-sm tracking-wide border border-[#D4A843]/40 text-[#D4A843] hover:bg-[#D4A843]/10 transition-colors"
+            className="px-5 py-3 rounded-sm text-sm tracking-wide border border-[#D4A843]/40 text-[#D4A843] hover:bg-[#D4A843]/10 transition-colors text-center"
             style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
             Instagram →
           </a>
@@ -291,7 +323,7 @@ function HeroSlide({ next }) {
       </div>
 
       {/* Travel map */}
-      <div className="px-6 py-16 flex items-center justify-center relative">
+      <div className="px-3 sm:px-6 py-10 sm:py-16 flex items-center justify-center relative">
         <TravelMap />
       </div>
     </div>
@@ -300,15 +332,56 @@ function HeroSlide({ next }) {
 
 function ProjectsSlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>What I'm Building</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Projects</h2>
       <p className="text-[#8B9DAF] mb-6 text-sm" style={{ fontFamily: "Lora, serif" }}>
-        Consciousness tech, developer tools, physical wellness, and research.
+        One main quest, and a constellation of side quests.
       </p>
       <AlchemicalDivider />
-      <div className="grid grid-cols-2 gap-4 w-full">
+
+      {/* Featured — the main quest */}
+      <a href="https://supervious.ai" target="_blank" rel="noopener noreferrer"
+        className="card-alchemist rise-in relative w-full p-6 sm:p-7 rounded-sm text-left mb-4 group block overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, rgba(212,168,67,0.08), rgba(44,24,16,0.4))",
+          border: "1px solid rgba(212,168,67,0.35)",
+          textDecoration: "none",
+        }}>
+        <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#D4A843]/50 to-transparent" />
+        <div className="flex items-start gap-4">
+          <span className="text-3xl flex-shrink-0 mt-1 text-[#D4A843]">✶</span>
+          <div className="flex-1">
+            <div className="flex items-center gap-3 flex-wrap mb-1">
+              <h3 className="text-[#EDE0CC] font-bold text-lg group-hover:text-[#D4A843] transition-colors"
+                style={{ fontFamily: "Playfair Display, serif" }}>
+                Supervious <span className="text-xs opacity-50">↗</span>
+              </h3>
+              <span className="text-[10px] px-2 py-0.5 border border-[#D4A843]/50 text-[#D4A843] tracking-widest uppercase rounded-sm"
+                style={{ fontFamily: "Inter, sans-serif", background: "rgba(212,168,67,0.1)" }}>
+                Co-founder · Main Quest
+              </span>
+            </div>
+            <p className="text-[#8B9DAF] text-sm leading-relaxed mb-3"
+              style={{ fontFamily: "Lora, serif" }}>
+              AI for life insurance — intelligent client intake, underwriting analysis, and tooling
+              that lets agents place the right policy in a fraction of the time. This is where most
+              of my energy goes.
+            </p>
+            <div className="flex gap-1.5 flex-wrap">
+              {["Life Insurance", "AI", "supervious.ai"].map(t => (
+                <span key={t} className="text-[10px] px-1.5 py-0.5 border border-[#704214]/40 text-[#C17817]"
+                  style={{ fontFamily: "Inter, sans-serif", background: "rgba(193,120,23,0.08)" }}>
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
         {[
           {
             glyph: "◎",
@@ -354,9 +427,9 @@ function ProjectsSlide() {
             tags: ["Neuroscience", "Research"],
             accent: "#6B3FA0",
           },
-        ].map(v => (
-          <div key={v.name} className="card-alchemist flex gap-3 p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+        ].map((v, i) => (
+          <div key={v.name} className="card-alchemist rise-in flex gap-3 p-5 rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${80 + i * 60}ms` }}>
             <span className="text-xl flex-shrink-0 w-7 text-center mt-0.5" style={{ color: v.accent }}>{v.glyph}</span>
             <div>
               <h3 className="text-[#EDE0CC] font-semibold text-sm mb-1"
@@ -414,7 +487,7 @@ function WritingSlide() {
   ];
 
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Letters</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Writing</h2>
@@ -429,8 +502,8 @@ function WritingSlide() {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="card-alchemist flex gap-4 p-5 rounded-sm text-left group"
-            style={{ background: "rgba(44,24,16,0.3)", textDecoration: "none" }}
+            className="card-alchemist rise-in flex gap-4 p-5 rounded-sm text-left group"
+            style={{ background: "rgba(44,24,16,0.3)", textDecoration: "none", animationDelay: `${i * 60}ms` }}
           >
             <span className="text-[#704214]/50 text-xs mt-1.5 flex-shrink-0 w-4 text-right"
               style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
@@ -461,7 +534,7 @@ function WritingSlide() {
 
 function AthleticsSlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Physical Terrain</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Movement & Sport</h2>
@@ -469,7 +542,7 @@ function AthleticsSlide() {
         Life is the true marathon. This is just training for that.
       </p>
       <AlchemicalDivider />
-      <div className="grid grid-cols-2 gap-4 mb-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 w-full">
         {[
           { symbol: "◌", name: "Trail Running", detail: "Marathons, ultras, Born to Run philosophy" },
           { symbol: "◇", name: "Freediving", detail: "Breath, depth, stillness" },
@@ -477,9 +550,9 @@ function AthleticsSlide() {
           { symbol: "◆", name: "Tennis", detail: "Competitive play & technique study" },
           { symbol: "≋", name: "Swimming", detail: "Open water & laps" },
           { symbol: "⊕", name: "Cycling", detail: "Endurance cross-training" },
-        ].map(a => (
-          <div key={a.name} className="card-alchemist p-5 rounded-sm flex items-center gap-4 text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+        ].map((a, i) => (
+          <div key={a.name} className="card-alchemist rise-in p-5 rounded-sm flex items-center gap-4 text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${i * 60}ms` }}>
             <span className="text-[#D4A843] text-xl w-7 text-center flex-shrink-0">{a.symbol}</span>
             <div>
               <p className="text-[#EDE0CC] font-medium text-sm"
@@ -490,6 +563,51 @@ function AthleticsSlide() {
           </div>
         ))}
       </div>
+      {/* A philosophy on exercise — the five pillars */}
+      <div className="card-alchemist p-5 sm:p-6 rounded-sm w-full text-left mb-6"
+        style={{ background: "rgba(44,24,16,0.25)", border: "1px solid rgba(212,168,67,0.25)" }}>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-[#D4A843] text-sm">⚖</span>
+          <p className="text-[#D4A843] text-xs font-semibold uppercase tracking-widest"
+            style={{ fontFamily: "Inter, sans-serif" }}>A Philosophy on Exercise</p>
+        </div>
+        <p className="text-[#8B9DAF] text-sm leading-relaxed mb-4"
+          style={{ fontFamily: "Lora, serif" }}>
+          There are only five pillars. Everything else is decoration:
+        </p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {[
+            "Slow, long cardio",
+            "VO₂ max sprints",
+            "Weightlifting",
+            "Stretching",
+            "…a fifth one I keep forgetting",
+          ].map((pillar, i) => (
+            <span key={pillar}
+              className="px-3 py-1.5 text-xs border border-[#704214]/40 rounded-sm"
+              style={{
+                fontFamily: "Inter, sans-serif",
+                background: "rgba(112,66,20,0.1)",
+                color: i === 4 ? "#704214" : "#EDE0CC",
+                fontStyle: i === 4 ? "italic" : "normal",
+              }}>
+              {pillar}
+            </span>
+          ))}
+        </div>
+        <p className="text-[#8B9DAF] text-sm leading-relaxed"
+          style={{ fontFamily: "Lora, serif" }}>
+          The{" "}
+          <a href="https://carolbike.com" target="_blank" rel="noopener noreferrer"
+            className="text-[#D4A843] hover:text-[#EDE0CC] transition-colors"
+            style={{ textDecoration: "none" }}>CAROL Bike</a>
+          {" "}($3k + $20/mo) solves the sprint and VO₂ max pillar perfectly, in the minimum
+          possible time. Everyone should lift weights and be on a CAROL — that alone covers most
+          of it. Older folks can cover the rest with walks, rucks, hikes, or slow long runs.
+          That's the whole program.
+        </p>
+      </div>
+
       <div className="card-alchemist p-5 rounded-sm w-full text-left"
         style={{ background: "rgba(44,24,16,0.2)" }}>
         <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
@@ -504,7 +622,7 @@ function AthleticsSlide() {
 
 function PhilosophySlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Legend</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>What I Live By</h2>
@@ -539,9 +657,9 @@ function PhilosophySlide() {
             theme: "You are what you do",
             desc: "Not what you say you'll do. Data-driven in business, intuition-driven in life. Curiosity will conquer fear more than bravery ever will.",
           },
-        ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+        ].map((f, i) => (
+          <div key={f.theme} className="card-alchemist rise-in flex gap-4 p-5 rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${i * 60}ms` }}>
             <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
             <div>
               <p className="text-[#EDE0CC] font-semibold text-base"
@@ -557,9 +675,37 @@ function PhilosophySlide() {
 }
 
 function RecommendationsSlide() {
-  const [activeTab, setActiveTab] = useState("books");
+  const [activeTab, setActiveTab] = useState("favorites");
 
   const recs = {
+    favorites: {
+      label: "Favorites",
+      glyph: "✦",
+      items: [
+        { name: "CAROL Bike", url: "https://carolbike.com", note: "$3k + a $20/mo subscription, and the sprint/VO₂ max pillar of exercise is solved perfectly in the minimum amount of time. Everyone should be on one." },
+        { name: "Toyota Land Cruiser", url: "https://on.wsj.com/4aZ8IJ7", note: "Get an old gas-guzzler that's simple, easy to fix, and lasts forever. The WSJ agrees — old, loud SUVs are the hot-girl car now." },
+        { name: "Red Light Lamps & Glasses", note: "Lamps for the evening, glasses after sunset. The cheapest circadian upgrade there is." },
+        { name: "Tallow Sunscreen — Sun & Soul", note: "Non-toxic sun protection that your skin actually recognizes as food." },
+        { name: "Vitamix + Stainless Steel Container", note: "The blender for life — stainless so you're not blending microplastics into your smoothie." },
+        { name: "Cast Iron Everywhere", note: "No non-stick coatings in the house. Cast iron on every burner, forever." },
+        { name: "Manduka Yoga Mat", note: "Buy once, cry once. The mat outlasts the practice." },
+        { name: "DJI Mic / Wired Lavalier", note: "A clip-on mic for dictation and talking to your AI — which you should be doing at all times." },
+        { name: "Techmeme", url: "https://techmeme.com", note: "The one tech news feed worth following." },
+      ],
+    },
+    home: {
+      label: "Home",
+      glyph: "⌂",
+      items: [
+        { name: "No TV in the House", note: "The single best furniture decision you can make." },
+        { name: "Japanese Futon + Linen Sheets", note: "Sleep close to the ground on fabric that breathes." },
+        { name: "Fresh Flowers, Always", note: "Always buy flowers for your house. Non-negotiable." },
+        { name: "Aranet4 CO₂ Monitor", note: "Track your airflow. When the number climbs, open the windows." },
+        { name: "Grounding Straps & Mats", note: "Wrist straps at the desk, a mat under the bed." },
+        { name: "Water Filters — Shower & House", note: "RO if you have the money; if not, an Amazon carbon filter handles chlorine and fluoride really well. Filter the shower head too." },
+        { name: "DIY Skin, Hair & Body Mixes", note: "Build your own with cacao butter, jojoba oil, and tallow as the base — essential oils as the actives." },
+      ],
+    },
     books: {
       label: "Books",
       glyph: "📖",
@@ -603,9 +749,11 @@ function RecommendationsSlide() {
       label: "Gear",
       glyph: "⛺",
       items: [
+        { name: "100% Natural Fibers Only", note: "Cotton, linen, or wool for everything — dress shirts, t-shirts, pants, underwear. No plastic on skin." },
+        { name: "Thrifted First", note: "Buy your clothes used. Only buy new when absolutely necessary — and then from a brand that deserves it." },
+        { name: "Merino Wool Socks & Underwear", note: "From Hollow, People Socks, or plain merino on Amazon. Natural, long-lasting, the best base layer." },
         { name: "Shaman Warrior Sandals", note: "Minimalist running sandals. Born to Run philosophy on your feet." },
         { name: "Cashmere Wool Sweater", note: "Either thrifted or from an environmentally conscious company. Timeless and sustainable." },
-        { name: "Merino Wool Socks & Underwear", note: "Merino wool is natural and long-lasting. The best base layer." },
         { name: "Fuji XS-10 / X100V", note: "Film and digital. The Fuji colors are unmatched for street and travel." },
         { name: "La Sportiva TC Pro", note: "High-performance climbing shoe. Precision on rock." },
         { name: "Foam Roller, Massage Gun & Spiky Lacrosse Ball", note: "Daily recovery stack. Roll out, percussion, and deep tissue — quick and effective between sessions." },
@@ -619,14 +767,23 @@ function RecommendationsSlide() {
         { name: "Grass-Fed Sirloin Steak", note: "Very lean and tender cut of meat that's affordable for everyday consumption." },
         { name: "Isabelle Page Recipe Book", note: "Vegan cookbook. Clean, creative plant-based cooking." },
         { name: "Fasting Protocols", note: "3-day water fast quarterly. Monthly one-day fasts. Reset the system." },
-        { name: "No Alcohol, No Caffeine", note: "I don't want to consume poison. And I don't want caffeine to trick me into working on something I don't care about." },
         { name: "Ancestral Sourcing", note: "Grass-fed, pasture-raised, wild-caught. Source matters more than calories." },
+      ],
+    },
+    substances: {
+      label: "Substances",
+      glyph: "🍵",
+      items: [
+        { name: "Tea — the Best Caffeine Source", note: "Shou pu-erh and sheng pu-erh for daily drinking; high-mountain oolong when it matters. Kept minimal — I don't want caffeine tricking me into working on something I don't care about." },
+        { name: "Nicotine Patches", note: "Transdermal is probably the best way to take in nicotine — better than Zyns or smoking. I keep my tolerance low on purpose." },
+        { name: "No Alcohol", note: "I don't want to consume poison." },
       ],
     },
     fitness: {
       label: "Fitness",
       glyph: "◉",
       items: [
+        { name: "CAROL Bike Sprints", note: "REHIT protocol — the VO₂ max pillar solved in minutes, not hours." },
         { name: "Zone 2 Training", note: "80% of volume here. Aerobic base is everything for longevity." },
         { name: "5x5 Strength Training", note: "Compound lifts, progressive overload. Simple and effective." },
         { name: "Kettlebell Training", note: "Functional strength, grip, posterior chain. The one tool that does it all." },
@@ -644,7 +801,7 @@ function RecommendationsSlide() {
   const current = recs[activeTab];
 
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>The Codex</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Recommendations</h2>
@@ -653,12 +810,12 @@ function RecommendationsSlide() {
       </p>
 
       {/* Tab bar */}
-      <div className="flex gap-2 mb-6 justify-center flex-wrap">
+      <div className="flex gap-1.5 sm:gap-2 mb-6 justify-center flex-wrap">
         {tabs.map(([key, val]) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className="px-5 py-2.5 text-sm font-medium tracking-wide transition-all rounded-sm"
+            className="px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-all rounded-sm"
             style={{
               fontFamily: "Playfair Display, serif",
               color: activeTab === key ? "#EDE0CC" : "#704214",
@@ -676,14 +833,20 @@ function RecommendationsSlide() {
       {/* Items */}
       <div className="flex flex-col gap-3 w-full">
         {current.items.map((item, i) => (
-          <div key={item.name} className="card-alchemist flex gap-4 p-4 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+          <div key={item.name} className="card-alchemist rise-in flex gap-4 p-4 rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${Math.min(i * 40, 400)}ms` }}>
             <span className="text-[#704214]/50 text-xs mt-1 flex-shrink-0 w-4 text-right"
               style={{ fontFamily: "Lora, serif" }}>{i + 1}</span>
             <div>
               <p className="text-[#EDE0CC] font-semibold text-sm"
                 style={{ fontFamily: "Playfair Display, serif" }}>
-                {item.name}
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer"
+                    className="hover:text-[#D4A843] transition-colors"
+                    style={{ textDecoration: "none", color: "inherit" }}>
+                    {item.name} <span className="text-[10px] opacity-50">↗</span>
+                  </a>
+                ) : item.name}
                 {item.author && (
                   <span className="text-[#704214] font-normal text-xs ml-2"
                     style={{ fontFamily: "Inter, sans-serif" }}>— {item.author}</span>
@@ -701,7 +864,7 @@ function RecommendationsSlide() {
 
 function InnerWorkSlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Inner Cartography</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Consciousness & Community</h2>
@@ -731,9 +894,9 @@ function InnerWorkSlide() {
             theme: "Community as Practice",
             desc: "Men's group, intentional gatherings, Burning Man. The best game in life is making the most amount of friends possible.",
           },
-        ].map(f => (
-          <div key={f.theme} className="card-alchemist flex gap-4 p-5 rounded-sm text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+        ].map((f, i) => (
+          <div key={f.theme} className="card-alchemist rise-in flex gap-4 p-5 rounded-sm text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${i * 60}ms` }}>
             <span className="text-[#D4A843] text-lg flex-shrink-0 w-7 text-center mt-0.5">{f.glyph}</span>
             <div>
               <p className="text-[#EDE0CC] font-semibold text-base"
@@ -758,7 +921,7 @@ function InnerWorkSlide() {
 
 function VisionSlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Terra Incognita</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Where I'm Headed</h2>
@@ -790,9 +953,9 @@ function VisionSlide() {
             glyph: "⛰",
             desc: "A place to live, a community, a home. A high-end retreat center and intentional village in the Patagonian landscape.",
           },
-        ].map(p => (
-          <div key={p.label} className="card-alchemist p-5 rounded-sm flex gap-4 items-start text-left"
-            style={{ background: "rgba(44,24,16,0.3)" }}>
+        ].map((p, i) => (
+          <div key={p.label} className="card-alchemist rise-in p-5 rounded-sm flex gap-4 items-start text-left"
+            style={{ background: "rgba(44,24,16,0.3)", animationDelay: `${i * 60}ms` }}>
             <span className="text-[#D4A843] text-2xl flex-shrink-0 mt-0.5">{p.glyph}</span>
             <div>
               <p className="text-[#EDE0CC] font-semibold text-sm mb-1"
@@ -813,7 +976,7 @@ function VisionSlide() {
 
 function ConnectSlide() {
   return (
-    <div className="px-8 py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
+    <div className="px-4 py-10 sm:px-8 sm:py-16 min-h-full flex flex-col items-center text-center max-w-4xl mx-auto w-full">
       <CartoucheLabel>Open Routes</CartoucheLabel>
       <h2 className="text-3xl font-bold text-[#EDE0CC] mt-3 mb-1"
         style={{ fontFamily: "Playfair Display, serif" }}>Let's Connect</h2>
@@ -854,13 +1017,28 @@ function ConnectSlide() {
         ))}
       </div>
 
-      <div className="flex gap-3">
-        <a href="https://instagram.com/whereintheworldisnico" target="_blank" rel="noopener noreferrer"
-          className="wax-seal px-6 py-2.5 rounded-sm text-sm tracking-wide inline-flex items-center gap-2"
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center w-full sm:w-auto max-w-xs sm:max-w-none">
+        <a href="https://calendar.app.google/7jNHEZf5tfWWRTtbA" target="_blank" rel="noopener noreferrer"
+          className="wax-seal px-6 py-2.5 rounded-sm text-sm tracking-wide inline-flex items-center justify-center gap-2"
           style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
-          Instagram →
+          ◈ Get on my calendar →
         </a>
+        {[
+          { label: "LinkedIn", url: "https://www.linkedin.com/in/nicovaz/" },
+          { label: "Substack", url: "https://0to1billion.substack.com" },
+          { label: "Instagram", url: "https://instagram.com/whereintheworldisnico" },
+        ].map(link => (
+          <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
+            className="px-5 py-2.5 rounded-sm text-sm tracking-wide border border-[#D4A843]/40 text-[#D4A843] hover:bg-[#D4A843]/10 transition-colors text-center"
+            style={{ fontFamily: "Inter, sans-serif", textDecoration: "none" }}>
+            {link.label} →
+          </a>
+        ))}
       </div>
+
+      <p className="text-[#8B9DAF] text-xs mt-5 italic" style={{ fontFamily: "Lora, serif" }}>
+        The fastest route is the calendar — pick a time and it's on both our maps.
+      </p>
     </div>
   );
 }
@@ -885,17 +1063,73 @@ export default function App() {
   const [active, setActive] = useState(0);
   const [animKey, setAnimKey] = useState(0);
   const prevActive = useRef(0);
+  const navScrollRef = useRef(null);
+  const contentRef = useRef(null);
+  const touchStart = useRef(null);
 
   const go = (idx) => {
     prevActive.current = active;
     setActive(idx);
     setAnimKey(k => k + 1);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  };
+
+  // Keep the active waypoint centered when the nav trail scrolls (mobile).
+  // Delayed so the waypoint's 150ms size transition finishes first — a layout
+  // change mid-scroll makes the browser abort the smooth scroll. Some
+  // environments ignore programmatic smooth scrolling entirely, so snap as a
+  // fallback if the scroll never moved.
+  useEffect(() => {
+    const container = navScrollRef.current;
+    if (!container) return;
+    let snapTimer;
+    const scrollTimer = setTimeout(() => {
+      const el = container.querySelector(`[data-nav-idx="${active}"]`);
+      if (!el || container.scrollWidth <= container.clientWidth + 4) return;
+      const target = el.offsetLeft - container.clientWidth / 2 + el.offsetWidth / 2;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      container.scrollTo({ left: target, behavior: reduceMotion ? "auto" : "smooth" });
+      snapTimer = setTimeout(() => {
+        const clamped = Math.max(0, Math.min(target, container.scrollWidth - container.clientWidth));
+        if (Math.abs(container.scrollLeft - clamped) > 4) container.scrollLeft = clamped;
+      }, 500);
+    }, 200);
+    return () => {
+      clearTimeout(scrollTimer);
+      clearTimeout(snapTimer);
+    };
+  }, [active]);
+
+  // Swipe between slides on touch devices — ignores horizontal scrollers like
+  // the map, and multi-touch gestures like pinch-zoom
+  const onTouchStart = (e) => {
+    if (e.touches.length > 1 || e.target.closest("[data-hscroll]")) {
+      touchStart.current = null;
+      return;
+    }
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e) => {
+    const start = touchStart.current;
+    if (!start) return;
+    touchStart.current = null;
+    const dx = e.changedTouches[0].clientX - start.x;
+    const dy = e.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2) {
+      const target = dx < 0
+        ? Math.min(active + 1, slides.length - 1)
+        : Math.max(active - 1, 0);
+      if (target !== active) go(target);
+    }
+  };
+  const onTouchCancel = () => {
+    touchStart.current = null;
   };
 
   const { Component } = slides[active];
 
   return (
-    <div className="h-screen flex flex-col" style={{ background: "#0F1729" }}>
+    <div className="app-shell flex flex-col" style={{ background: "#0F1729" }}>
 
       {/* Navigation — cartographer's atlas header */}
       <nav className="leather-bg flex-shrink-0 relative" style={{ borderBottom: "2px solid rgba(112,66,20,0.5)" }}>
@@ -903,17 +1137,18 @@ export default function App() {
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/40 to-transparent" />
         <div className="absolute top-[3px] left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#D4A843]/15 to-transparent" />
 
-        <div className="flex items-center px-4 py-4 gap-3">
+        <div className="flex items-center px-3 sm:px-4 py-3 sm:py-4 gap-2 sm:gap-3">
           {/* Logo — clickable to home */}
           <button
             onClick={() => go(0)}
-            className="flex items-center gap-3 group flex-shrink-0"
+            aria-label="Nico — Home"
+            className="flex items-center gap-2 sm:gap-3 group flex-shrink-0"
             style={{ background: "none", border: "none", cursor: "pointer" }}
           >
-            <div className="relative">
+            <div className="relative" aria-hidden="true">
               <CompassRose size={40} className="group-hover:opacity-100 opacity-80 transition-opacity" />
             </div>
-            <div className="flex flex-col items-start">
+            <div className="hidden sm:flex flex-col items-start">
               <span className="text-[#EDE0CC] font-bold tracking-tight text-2xl group-hover:text-[#D4A843] transition-colors"
                 style={{ fontFamily: "Playfair Display, serif" }}>Nico</span>
               <span className="text-[#704214] text-[9px] tracking-[0.3em] uppercase -mt-0.5"
@@ -921,16 +1156,25 @@ export default function App() {
             </div>
           </button>
 
-          {/* Route Map Navigation — full-width waypoint trail */}
-          <div className="flex-1 flex items-center justify-center relative">
-            {/* Connecting route line behind buttons */}
-            <div className="absolute top-1/2 left-4 right-4 -translate-y-[2px] pointer-events-none" style={{ zIndex: 0 }}>
-              <div className="h-[2px]" style={{
-                background: "repeating-linear-gradient(to right, rgba(112,66,20,0.5) 0px, rgba(112,66,20,0.5) 8px, transparent 8px, transparent 14px)",
-              }} />
-            </div>
+          {/* Route Map Navigation — waypoint trail; scrolls horizontally on mobile */}
+          <div className="flex-1 min-w-0 relative">
+            {/* Edge fades — mobile scroll affordance */}
+            <div className="md:hidden absolute left-0 top-0 bottom-0 w-5 pointer-events-none" style={{
+              zIndex: 2, background: "linear-gradient(to right, #2C1810, transparent)" }} />
+            <div className="md:hidden absolute right-0 top-0 bottom-0 w-5 pointer-events-none" style={{
+              zIndex: 2, background: "linear-gradient(to left, #2C1810, transparent)" }} />
 
-            <div className="flex items-center justify-between w-full relative px-2" style={{ zIndex: 1 }}>
+            <div ref={navScrollRef} data-hscroll
+              className="overflow-x-auto md:overflow-visible scrollbar-hide py-2 -my-2">
+              <div className="relative min-w-max md:min-w-0 px-4 md:px-2">
+                {/* Connecting route line behind buttons */}
+                <div className="absolute left-6 right-6 pointer-events-none" style={{ zIndex: 0, top: "26px" }}>
+                  <div className="h-[2px]" style={{
+                    background: "repeating-linear-gradient(to right, rgba(112,66,20,0.5) 0px, rgba(112,66,20,0.5) 8px, transparent 8px, transparent 14px)",
+                  }} />
+                </div>
+
+                <div className="flex items-center gap-5 md:gap-0 md:justify-between relative" style={{ zIndex: 1 }}>
               {slides.slice(1).map((s, idx) => {
                 const i = idx + 1;
                 const isActive = active === i;
@@ -939,8 +1183,9 @@ export default function App() {
                 return (
                   <button
                     key={s.id}
+                    data-nav-idx={i}
                     onClick={() => go(i)}
-                    className="flex flex-col items-center gap-1 px-1 py-1 transition-all relative group"
+                    className="flex flex-col items-center gap-1 px-1 py-1 transition-all relative group flex-shrink-0"
                     style={{ background: "none", border: "none", cursor: "pointer" }}
                   >
                     {/* Waypoint marker — larger & bolder */}
@@ -1013,6 +1258,8 @@ export default function App() {
                   </button>
                 );
               })}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1022,7 +1269,8 @@ export default function App() {
       </nav>
 
       {/* Slide content */}
-      <div className="flex-1 overflow-y-auto relative" style={{ minHeight: 0 }}>
+      <div ref={contentRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onTouchCancel={onTouchCancel}
+        className="flex-1 overflow-y-auto relative" style={{ minHeight: 0 }}>
         {/* Subtle candlelight vignette */}
         <div className="absolute inset-0 pointer-events-none"
           style={{
@@ -1037,24 +1285,25 @@ export default function App() {
       <div className="leather-bg flex-shrink-0 relative" style={{ borderTop: "2px solid rgba(112,66,20,0.5)" }}>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4A843]/20 to-transparent" />
 
-        <div className="flex justify-between items-center px-6 py-3">
+        <div className="flex justify-between items-center px-3 sm:px-6 py-2.5 sm:py-3">
           {/* West / Prev */}
           <button
             onClick={() => go(Math.max(active - 1, 0))}
             disabled={active === 0}
-            className="flex items-center gap-2 group disabled:opacity-20 transition-all"
+            aria-label={active > 0 ? `Previous: ${slides[active - 1].label}` : "Previous"}
+            className="flex items-center gap-2 group disabled:opacity-20 transition-all p-2 -m-1"
             style={{ background: "none", border: "none", cursor: active === 0 ? "default" : "pointer" }}
           >
             <span className="text-[#D4A843] text-sm group-hover:text-[#EDE0CC] transition-colors"
               style={{ fontFamily: "Playfair Display, serif" }}>W</span>
             <span className="text-[#704214] text-xs group-hover:text-[#D4A843] transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}>
-              ◂ {active > 0 ? slides[active - 1].label : ""}
+              ◂ <span className="hidden sm:inline">{active > 0 ? slides[active - 1].label : ""}</span>
             </span>
           </button>
 
           {/* Map waypoints */}
-          <div className="flex gap-1.5 items-center">
+          <div className="flex gap-0.5 sm:gap-1 items-center">
             <span className="text-[#704214]/30 text-[10px] mr-1" style={{ fontFamily: "Inter, sans-serif" }}>
               {active + 1}/{slides.length}
             </span>
@@ -1062,19 +1311,23 @@ export default function App() {
               <button
                 key={i}
                 onClick={() => go(i)}
-                className="transition-all group relative"
+                className="transition-all group relative flex items-center justify-center"
                 title={s.label}
-                style={{
-                  width: active === i ? "20px" : "8px",
-                  height: "8px",
-                  borderRadius: active === i ? "4px" : "50%",
-                  background: active === i ? "#D4A843" : i < active ? "rgba(212,168,67,0.4)" : "rgba(112,66,20,0.5)",
-                  border: active === i ? "1px solid rgba(212,168,67,0.6)" : "1px solid transparent",
-                  cursor: "pointer",
-                  padding: 0,
-                  boxShadow: active === i ? "0 0 8px rgba(212,168,67,0.3)" : "none",
-                }}
-              />
+                aria-label={s.label}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: "5px 2px" }}
+              >
+                <span
+                  className="transition-all block"
+                  style={{
+                    width: active === i ? "20px" : "8px",
+                    height: "8px",
+                    borderRadius: active === i ? "4px" : "50%",
+                    background: active === i ? "#D4A843" : i < active ? "rgba(212,168,67,0.4)" : "rgba(112,66,20,0.5)",
+                    border: active === i ? "1px solid rgba(212,168,67,0.6)" : "1px solid transparent",
+                    boxShadow: active === i ? "0 0 8px rgba(212,168,67,0.3)" : "none",
+                  }}
+                />
+              </button>
             ))}
           </div>
 
@@ -1082,12 +1335,13 @@ export default function App() {
           <button
             onClick={() => go(Math.min(active + 1, slides.length - 1))}
             disabled={active === slides.length - 1}
-            className="flex items-center gap-2 group disabled:opacity-20 transition-all"
+            aria-label={active < slides.length - 1 ? `Next: ${slides[active + 1].label}` : "Next"}
+            className="flex items-center gap-2 group disabled:opacity-20 transition-all p-2 -m-1"
             style={{ background: "none", border: "none", cursor: active === slides.length - 1 ? "default" : "pointer" }}
           >
             <span className="text-[#704214] text-xs group-hover:text-[#D4A843] transition-colors"
               style={{ fontFamily: "Inter, sans-serif" }}>
-              {active < slides.length - 1 ? slides[active + 1].label : ""} ▸
+              <span className="hidden sm:inline">{active < slides.length - 1 ? slides[active + 1].label : ""}</span> ▸
             </span>
             <span className="text-[#D4A843] text-sm group-hover:text-[#EDE0CC] transition-colors"
               style={{ fontFamily: "Playfair Display, serif" }}>E</span>

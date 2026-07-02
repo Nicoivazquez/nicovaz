@@ -50,6 +50,16 @@ body {
   height: 100%;
 }
 
+/* App shell height — dvh keeps the footer visible under iOS Safari's dynamic toolbar */
+.app-shell {
+  height: 100vh;
+}
+@supports (height: 100dvh) {
+  .app-shell {
+    height: 100dvh;
+  }
+}
+
 /* Parchment texture overlay */
 .parchment-bg {
   position: relative;
@@ -181,6 +191,46 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--sepia);
+}
+
+/* Hidden scrollbar for horizontal scrollers (mobile nav, map panning) */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Staggered card entrance — compositor-friendly (opacity + transform only) */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  opacity: 0;
+  animation: rise-in 0.5s ease-out forwards;
+}
+
+/* X marks the spot — hand-drawn pulse on the current map stop */
+@keyframes x-pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .rise-in {
+    opacity: 1;
+  }
 }
 
 /* Section divider - ornamental */
