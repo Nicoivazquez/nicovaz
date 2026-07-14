@@ -27,7 +27,7 @@ function CompassRose({ size = 64, className = "" }) {
   );
 }
 
-function AlchemicalDivider() {
+export function AlchemicalDivider() {
   return (
     <div className="flex items-center gap-3 my-6 opacity-40">
       <div className="flex-1 h-px bg-gradient-to-r from-transparent to-[#704214]" />
@@ -39,7 +39,7 @@ function AlchemicalDivider() {
   );
 }
 
-function CartoucheLabel({ children, className = "" }) {
+export function CartoucheLabel({ children, className = "" }) {
   return (
     <div className={`relative inline-flex items-center px-4 py-1 ${className}`}>
       <div className="absolute inset-0 border border-[#D4A843]/40 rounded-sm"
@@ -573,7 +573,7 @@ function AthleticsSlide() {
         </div>
         <p className="text-[#8B9DAF] text-sm leading-relaxed mb-4"
           style={{ fontFamily: "Lora, serif" }}>
-          There are only five pillars. Everything else is decoration:
+          There are only four pillars. Everything else is decoration:
         </p>
         <div className="flex flex-wrap gap-2 mb-4">
           {[
@@ -581,16 +581,10 @@ function AthleticsSlide() {
             "VO₂ max sprints",
             "Weightlifting",
             "Stretching",
-            "…a fifth one I keep forgetting",
-          ].map((pillar, i) => (
+          ].map(pillar => (
             <span key={pillar}
-              className="px-3 py-1.5 text-xs border border-[#704214]/40 rounded-sm"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                background: "rgba(112,66,20,0.1)",
-                color: i === 4 ? "#704214" : "#EDE0CC",
-                fontStyle: i === 4 ? "italic" : "normal",
-              }}>
+              className="px-3 py-1.5 text-xs border border-[#704214]/40 rounded-sm text-[#EDE0CC]"
+              style={{ fontFamily: "Inter, sans-serif", background: "rgba(112,66,20,0.1)" }}>
               {pillar}
             </span>
           ))}
@@ -602,9 +596,8 @@ function AthleticsSlide() {
             className="text-[#D4A843] hover:text-[#EDE0CC] transition-colors"
             style={{ textDecoration: "none" }}>CAROL Bike</a>
           {" "}($3k + $20/mo) solves the sprint and VO₂ max pillar perfectly, in the minimum
-          possible time. Everyone should lift weights and be on a CAROL — that alone covers most
-          of it. Older folks can cover the rest with walks, rucks, hikes, or slow long runs.
-          That's the whole program.
+          possible time. A CAROL, a yoga mat with YouTube videos, and strength training does
+          most of it. Older folks can cover the rest with walks, rucks, hikes, or slow long runs.
         </p>
       </div>
 
@@ -612,8 +605,7 @@ function AthleticsSlide() {
         style={{ background: "rgba(44,24,16,0.2)" }}>
         <p className="text-[#8B9DAF] text-sm leading-relaxed italic"
           style={{ fontFamily: "Lora, serif" }}>
-          "If you get tired, learn to rest, not to quit. Come back from every setback stronger —
-          Achilles tendinitis, broken ankle, IT band. The body is the instrument."
+          "There is freedom in discipline."
         </p>
       </div>
     </div>
@@ -1073,6 +1065,11 @@ export default function App() {
     setAnimKey(k => k + 1);
     if (contentRef.current) contentRef.current.scrollTop = 0;
   };
+
+  // Let the ledger know which slides people actually read
+  useEffect(() => {
+    window.posthog?.capture("slide_view", { slide: slides[active].id });
+  }, [active]);
 
   // Keep the active waypoint centered when the nav trail scrolls (mobile).
   // Delayed so the waypoint's 150ms size transition finishes first — a layout
